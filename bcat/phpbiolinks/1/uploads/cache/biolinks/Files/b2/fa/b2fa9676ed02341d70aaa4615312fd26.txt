@@ -1,0 +1,1 @@
+a:6:{s:1:"k";s:17:"_TAG_link_id=1993";s:1:"d";a:2:{s:41:"link?url=8478e2bdb758f8467225ae87ed3750c2";i:1632943699;s:41:"link?url=eacd478aedc798622348f9ffd75e23ac";i:1632943867;}s:1:"g";a:0:{}s:1:"e";O:8:"DateTime":3:{s:4:"date";s:26:"2021-09-29 19:31:07.249244";s:13:"timezone_type";i:3;s:8:"timezone";s:3:"UTC";}s:1:"m";N;s:1:"c";N;}
