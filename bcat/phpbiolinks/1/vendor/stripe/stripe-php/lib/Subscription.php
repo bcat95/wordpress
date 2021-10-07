@@ -14,6 +14,7 @@ namespace Stripe;
  * @property string $id Unique identifier for the object.
  * @property string $object String representing the object's type. Objects of the same type share the same value.
  * @property null|float $application_fee_percent A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner's Stripe account.
+ * @property \Stripe\StripeObject $automatic_tax
  * @property int $billing_cycle_anchor Determines the date of the first full invoice, and, for plans with <code>month</code> or <code>year</code> intervals, the day of the month for subsequent invoices.
  * @property null|\Stripe\StripeObject $billing_thresholds Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing period
  * @property null|int $cancel_at A date in the future at which the subscription will automatically get canceled
@@ -36,6 +37,7 @@ namespace Stripe;
  * @property \Stripe\StripeObject $metadata Set of <a href="https://stripe.com/docs/api/metadata">key-value pairs</a> that you can attach to an object. This can be useful for storing additional information about the object in a structured format.
  * @property null|int $next_pending_invoice_item_invoice Specifies the approximate timestamp on which any pending invoice items will be billed according to the schedule provided at <code>pending_invoice_item_interval</code>.
  * @property null|\Stripe\StripeObject $pause_collection If specified, payment collection for this subscription will be paused.
+ * @property null|\Stripe\StripeObject $payment_settings Payment settings passed on to invoices created by the subscription.
  * @property null|\Stripe\StripeObject $pending_invoice_item_interval Specifies an interval for how often to bill for any pending invoice items. It is analogous to calling <a href="https://stripe.com/docs/api#create_invoice">Create an invoice</a> for the given subscription at the specified interval.
  * @property null|string|\Stripe\SetupIntent $pending_setup_intent You can use this <a href="https://stripe.com/docs/api/setup_intents">SetupIntent</a> to collect user authentication when creating a subscription without immediate payment or updating a subscription's payment method, allowing you to optimize for off-session payments. Learn more in the <a href="https://stripe.com/docs/billing/migration/strong-customer-authentication#scenario-2">SCA Migration Guide</a>.
  * @property null|\Stripe\StripeObject $pending_update If specified, <a href="https://stripe.com/docs/billing/subscriptions/pending-updates">pending updates</a> that will be applied to the subscription once the <code>latest_invoice</code> has been paid.

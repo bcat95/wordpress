@@ -1,3 +1,17 @@
+## 8.0.6
+#### _"Re-deconfined"_
+##### 07 july 2021
+- __Helpers__
+  - Allow $cacheItem to be retrieved by callback argument in CacheConditionalHelper (@geolim4)
+
+## 8.0.5
+#### _"Re-re-confined"_
+##### 05 april 2021
+- __Drivers__
+  - Fixed #782 // Random warning in Files driver
+  - Fixed #781 // bad type hint Riak driver
+  - Fixed #788 // Redundant directory name for Sqlite
+
 ## 8.0.4
 #### _"Confined Xmas"_
 ##### 21 december 2020
