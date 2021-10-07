@@ -529,3 +529,136 @@
 
 </div>
 
+<hr class="border-gray-100 my-7" />
+
+<div class="">
+
+    <div class="mb-3">
+        <h2 class="h4"><?= language()->admin_api_documentation->plans->header ?></h2>
+    </div>
+
+    <div class="accordion">
+        <div class="card">
+            <div class="card-header bg-gray-200 p-3 position-relative">
+                <h3 class="h6 m-0">
+                    <a href="#" class="stretched-link" data-toggle="collapse" data-target="#plans_read_all" aria-expanded="true" aria-controls="plans_read_all">
+                        <?= language()->admin_api_documentation->plans->read_all_header ?>
+                    </a>
+                </h3>
+            </div>
+
+            <div id="plans_read_all" class="collapse">
+                <div class="card-body">
+
+                    <div class="form-group mb-4">
+                        <label><?= language()->admin_api_documentation->endpoint ?></label>
+                        <div class="card bg-gray-200 border-0">
+                            <div class="card-body">
+                                <span class="badge badge-success mr-3">GET</span> <span class="text-muted"><?= SITE_URL ?>admin-api/plans/</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label><?= language()->admin_api_documentation->example ?></label>
+                        <div class="card bg-gray-200 border-0">
+                            <div class="card-body">
+                                curl --request GET \<br />
+                                --url '<?= SITE_URL ?>admin-api/plans/' \<br />
+                                --header 'Authorization: Bearer <span class="text-primary">{api_key}</span>' \
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?= language()->admin_api_documentation->response ?></label>
+                        <div class="card bg-gray-200 border-0">
+                                        <pre class="card-body">
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Golden",
+            "description": ":)",
+            "monthly_price": 3.99,
+            "annual_price": 49.9,
+            "lifetime_price": 99,
+            "trial_days": 7,
+            "settings": {
+                ...
+            },
+            "taxes_ids": [],
+            "color": "",
+            "status": 1,
+            "date": "2020-01-01 12:00:00"
+        }
+    ]
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-gray-200 p-3 position-relative">
+                <h3 class="h6 m-0">
+                    <a href="#" class="stretched-link" data-toggle="collapse" data-target="#plans_read" aria-expanded="true" aria-controls="plans_read">
+                        <?= language()->admin_api_documentation->plans->read_header ?>
+                    </a>
+                </h3>
+            </div>
+
+            <div id="plans_read" class="collapse">
+                <div class="card-body">
+
+                    <div class="form-group mb-4">
+                        <label><?= language()->admin_api_documentation->endpoint ?></label>
+                        <div class="card bg-gray-200 border-0">
+                            <div class="card-body">
+                                <span class="badge badge-success mr-3">GET</span> <span class="text-muted"><?= SITE_URL ?>admin-api/plans/</span><span class="text-primary">{plan_id}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label><?= language()->admin_api_documentation->example ?></label>
+                        <div class="card bg-gray-200 border-0">
+                            <div class="card-body">
+                                curl --request GET \<br />
+                                --url '<?= SITE_URL ?>admin-api/plans/<span class="text-primary">{plan_id}</span>' \<br />
+                                --header 'Authorization: Bearer <span class="text-primary">{api_key}</span>' \
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?= language()->admin_api_documentation->response ?></label>
+                        <div class="card bg-gray-200 border-0">
+                            <pre class="card-body">
+{
+    "data": {
+        "id": 1,
+        "name": "Golden",
+        "description": "",
+        "monthly_price": 3.99,
+        "annual_price": 49.9,
+        "lifetime_price": 99,
+        "trial_days": 7,
+        "settings": {
+            ...
+        },
+        "taxes_ids": [],
+        "color": "",
+        "status": 1,
+        "date": "2020-01-01 12:00:00"
+    }
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

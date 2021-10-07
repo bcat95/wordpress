@@ -16,12 +16,16 @@
 .link-image {
     width: 125px;
     height: 125px;
-    border-radius: 50%;
-    margin-bottom: 1rem;
+    object-fit: contain;
 }
 
 .link-verified {
+    border: 2px solid #3897F0;
+    border-radius: 50rem;
+    padding: .25rem .4rem;
+    background: white;
     color: #3897F0;
+    font-weight: bold;
 }
 
 .link-btn {
@@ -31,7 +35,6 @@
     padding: 1rem 4.5rem;
     font-size: 1.1rem;
     box-shadow: 0 0 20px #00000010;
-    border: 0;
     transition: opacity 0.3s, background 0.3s;
     border-radius: 0;
 }
@@ -40,12 +43,36 @@
     animation: none;
 }
 
+.link-btn-straight {
+    border-radius: 0;
+}
+
 .link-btn-round {
     border-radius: 50px;
 }
 
 .link-btn-rounded {
     border-radius: .3rem;
+}
+
+.link-avatar-straight {
+    border-radius: 0;
+}
+
+.link-avatar-round {
+    border-radius: 50rem;
+}
+
+.link-avatar-rounded {
+    border-radius: .3rem;
+}
+
+.link-hover-animation {
+    transition: transform 0.3s;
+}
+
+.link-hover-animation:hover {
+    transform: scale(1.025);
 }
 
 .link-btn-image-wrapper {
@@ -100,18 +127,32 @@
     height: auto;
 }
 
+.link-external-item-image {
+    width: 100%;
+    height: auto;
+    max-height: 10rem;
+    object-fit: cover;
+}
+
 .link-iframe-round {
     border-radius: .3rem;
     overflow:hidden;
     position:relative;
 }
 
-.tiktok-embed {
-    border-radius: .3rem !important;
+.link-round {
+    border-radius: .3rem;
+}
+
+.link-qr-code img {
+    width: 100%;
 }
 
 .link-footer {
     margin: 3rem 0;
+}
+
+.link-footer-branding {
     font-size: .9rem;
 }
 
@@ -138,4 +179,12 @@
 
 .link-body-background-six {
     background: linear-gradient(to bottom, #fc5c7d, #6a82fb);
+}
+
+.link-body-background-seven {
+    background: linear-gradient(135deg, #414345, #232526);
+}
+
+.link-body-background-eight {
+    background: linear-gradient(135deg, #44A08D, #093637);
 }

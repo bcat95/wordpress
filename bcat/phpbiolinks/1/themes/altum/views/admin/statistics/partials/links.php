@@ -3,11 +3,30 @@
 <?php ob_start() ?>
 <div class="card mb-5">
     <div class="card-body">
-        <h2 class="h4"><i class="fa fa-fw fa-link fa-xs text-muted"></i> <?= language()->admin_statistics->links->track_links->header ?></h2>
-        <p class="text-muted"><?= language()->admin_statistics->links->track_links->subheader ?></p>
+        <h2 class="h4"><i class="fa fa-fw fa-link fa-xs text-muted"></i> <?= language()->admin_statistics->links->shortened_links->header ?></h2>
+        <div class="d-flex flex-column flex-xl-row">
+            <div class="mb-2 mb-xl-0 mr-4">
+                <span class="font-weight-bold"><?= nr($data->total['shortened_links']) ?></span> <?= language()->admin_statistics->links->shortened_links->chart ?>
+            </div>
+        </div>
 
         <div class="chart-container">
-            <canvas id="track_links"></canvas>
+            <canvas id="shortened_links"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-5">
+    <div class="card-body">
+        <h2 class="h4"><i class="fa fa-fw fa-hashtag fa-xs text-muted"></i> <?= language()->admin_statistics->links->biolink_links->header ?></h2>
+        <div class="d-flex flex-column flex-xl-row">
+            <div class="mb-2 mb-xl-0 mr-4">
+                <span class="font-weight-bold"><?= nr($data->total['biolink_links']) ?></span> <?= language()->admin_statistics->links->biolink_links->chart ?>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="biolink_links"></canvas>
         </div>
     </div>
 </div>
@@ -18,20 +37,42 @@
     let color = css.getPropertyValue('--primary');
     let color_gradient = null;
 
-    /* Display chart */
-    let track_links_chart = document.getElementById('track_links').getContext('2d');
-    color_gradient = track_links_chart.createLinearGradient(0, 0, 0, 250);
+    /* Prepare chart */
+    let shortened_links_chart = document.getElementById('shortened_links').getContext('2d');
+    color_gradient = shortened_links_chart.createLinearGradient(0, 0, 0, 250);
     color_gradient.addColorStop(0, 'rgba(63, 136, 253, .1)');
     color_gradient.addColorStop(1, 'rgba(63, 136, 253, 0.025)');
 
     /* Display chart */
-    new Chart(track_links_chart, {
+    new Chart(shortened_links_chart, {
         type: 'line',
         data: {
-            labels: <?= $data->track_links_chart['labels'] ?>,
+            labels: <?= $data->shortened_links_chart['labels'] ?>,
             datasets: [{
-                label: <?= json_encode(language()->admin_statistics->links->track_links->chart_track_links) ?>,
-                data: <?= $data->track_links_chart['track_links'] ?? '[]' ?>,
+                label: <?= json_encode(language()->admin_statistics->links->shortened_links->chart) ?>,
+                data: <?= $data->shortened_links_chart['shortened_links'] ?? '[]' ?>,
+                backgroundColor: color_gradient,
+                borderColor: color,
+                fill: true
+            }]
+        },
+        options: chart_options
+    });
+
+    /* Prepare chart */
+    let biolink_links_chart = document.getElementById('biolink_links').getContext('2d');
+    color_gradient = biolink_links_chart.createLinearGradient(0, 0, 0, 250);
+    color_gradient.addColorStop(0, 'rgba(63, 136, 253, .1)');
+    color_gradient.addColorStop(1, 'rgba(63, 136, 253, 0.025)');
+
+    /* Display chart */
+    new Chart(biolink_links_chart, {
+        type: 'line',
+        data: {
+            labels: <?= $data->biolink_links_chart['labels'] ?>,
+            datasets: [{
+                label: <?= json_encode(language()->admin_statistics->links->biolink_links->chart) ?>,
+                data: <?= $data->biolink_links_chart['biolink_links'] ?? '[]' ?>,
                 backgroundColor: color_gradient,
                 borderColor: color,
                 fill: true

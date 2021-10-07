@@ -4,6 +4,11 @@
 <div class="card mb-5">
     <div class="card-body">
         <h2 class="h4"><i class="fa fa-fw fa-users fa-xs text-muted"></i> <?= language()->admin_statistics->growth->users->header ?></h2>
+        <div class="d-flex flex-column flex-xl-row">
+            <div class="mb-2 mb-xl-0 mr-4">
+                <span class="font-weight-bold"><?= nr($data->total['users']) ?></span> <?= language()->admin_statistics->growth->users->chart ?>
+            </div>
+        </div>
 
         <div class="chart-container">
             <canvas id="users"></canvas>
@@ -13,27 +18,12 @@
 
 <div class="card mb-5">
     <div class="card-body">
-        <h2 class="h4"><i class="fa fa-fw fa-server fa-xs text-muted"></i> <?= language()->admin_statistics->growth->projects->header ?></h2>
-
-        <div class="chart-container">
-            <canvas id="projects"></canvas>
-        </div>
-    </div>
-</div>
-
-<div class="card mb-5">
-    <div class="card-body">
-        <h2 class="h4"><i class="fa fa-fw fa-user-shield fa-xs text-muted"></i> <?= language()->admin_statistics->growth->links->header ?></h2>
-
-        <div class="chart-container">
-            <canvas id="links"></canvas>
-        </div>
-    </div>
-</div>
-
-<div class="card mb-5">
-    <div class="card-body">
         <h2 class="h4"><i class="fa fa-fw fa-user-friends fa-xs text-muted"></i> <?= language()->admin_statistics->growth->users_logs->header ?></h2>
+        <div class="d-flex flex-column flex-xl-row">
+            <div class="mb-2 mb-xl-0 mr-4">
+                <span class="font-weight-bold"><?= nr($data->total['users_logs']) ?></span> <?= language()->admin_statistics->growth->users_logs->chart ?>
+            </div>
+        </div>
 
         <div class="chart-container">
             <canvas id="users_logs"></canvas>
@@ -41,16 +31,21 @@
     </div>
 </div>
 
-<?php if(in_array(settings()->license->type, ['SPECIAL', 'Extended License'])): ?>
-<div class="card mb-5">
-    <div class="card-body">
-        <h2 class="h4"><i class="fa fa-fw fa-tags fa-xs text-muted"></i> <?= language()->admin_statistics->growth->redeemed_codes->header ?></h2>
+<?php if(in_array(settings()->license->type, ['Extended License', 'extended'])): ?>
+    <div class="card mb-5">
+        <div class="card-body">
+            <h2 class="h4"><i class="fa fa-fw fa-tags fa-xs text-muted"></i> <?= language()->admin_statistics->growth->redeemed_codes->header ?></h2>
+            <div class="d-flex flex-column flex-xl-row">
+                <div class="mb-2 mb-xl-0 mr-4">
+                    <span class="font-weight-bold"><?= nr($data->total['redeemed_codes']) ?></span> <?= language()->admin_statistics->growth->redeemed_codes->chart ?>
+                </div>
+            </div>
 
-        <div class="chart-container">
-            <canvas id="redeemed_codes"></canvas>
+            <div class="chart-container">
+                <canvas id="redeemed_codes"></canvas>
+            </div>
         </div>
     </div>
-</div>
 <?php endif ?>
 
 <?php $html = ob_get_clean() ?>
@@ -86,52 +81,6 @@
     });
 
 
-    let projects_chart = document.getElementById('projects').getContext('2d');
-    color_gradient = projects_chart.createLinearGradient(0, 0, 0, 250);
-    color_gradient.addColorStop(0, 'rgba(63, 136, 253, .1)');
-    color_gradient.addColorStop(1, 'rgba(63, 136, 253, 0.025)');
-
-    new Chart(projects_chart, {
-        type: 'line',
-        data: {
-            labels: <?= $data->projects_chart['labels'] ?>,
-            datasets: [
-                {
-                    label: <?= json_encode(language()->admin_statistics->growth->projects->chart) ?>,
-                    data: <?= $data->projects_chart['projects'] ?? '[]' ?>,
-                    backgroundColor: color_gradient,
-                    borderColor: color,
-                    fill: true
-                }
-            ]
-        },
-        options: chart_options
-    });
-
-
-    let links_chart = document.getElementById('links').getContext('2d');
-    color_gradient = links_chart.createLinearGradient(0, 0, 0, 250);
-    color_gradient.addColorStop(0, 'rgba(63, 136, 253, .1)');
-    color_gradient.addColorStop(1, 'rgba(63, 136, 253, 0.025)');
-
-    new Chart(links_chart, {
-        type: 'line',
-        data: {
-            labels: <?= $data->links_chart['labels'] ?>,
-            datasets: [
-                {
-                    label: <?= json_encode(language()->admin_statistics->growth->links->chart) ?>,
-                    data: <?= $data->links_chart['links'] ?? '[]' ?>,
-                    backgroundColor: color_gradient,
-                    borderColor: color,
-                    fill: true
-                }
-            ]
-        },
-        options: chart_options
-    });
-
-
     let users_logs_chart = document.getElementById('users_logs').getContext('2d');
     color_gradient = users_logs_chart.createLinearGradient(0, 0, 0, 250);
     color_gradient.addColorStop(0, 'rgba(63, 136, 253, .1)');
@@ -155,7 +104,7 @@
     });
 
 
-    <?php if(in_array(settings()->license->type, ['SPECIAL', 'Extended License'])): ?>
+    <?php if(in_array(settings()->license->type, ['Extended License', 'extended'])): ?>
     let redeemed_codes_chart = document.getElementById('redeemed_codes').getContext('2d');
     color_gradient = redeemed_codes_chart.createLinearGradient(0, 0, 0, 250);
     color_gradient.addColorStop(0, 'rgba(63, 136, 253, .1)');

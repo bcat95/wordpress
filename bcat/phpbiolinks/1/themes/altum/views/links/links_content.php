@@ -89,7 +89,10 @@
                         </div>
 
                         <div class="form-group px-4">
-                            <label for="project_id" class="small"><?= language()->links->filters->project_id ?></label>
+                            <label for="project_id" class="small">
+                                <?= language()->links->filters->project_id ?>
+                                <a href="<?= url('projects') ?>" target="_blank" class="ml-3 small"><?= language()->projects->create ?></a>
+                            </label>
                             <select name="project_id" id="project_id" class="form-control form-control-sm">
                                 <option value=""><?= language()->global->filters->all ?></option>
                                 <?php foreach($data->projects as $row): ?>
@@ -134,7 +137,7 @@
                         </div>
 
                         <div class="form-group px-4 mt-4">
-                            <button type="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
+                            <button type="submit" name="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
                         </div>
                     </form>
 
@@ -148,7 +151,7 @@
 
     <?php foreach($data->links as $row): ?>
 
-        <div class="custom-row my-4 border rounded <?= $row->is_enabled ? null : 'custom-row-inactive' ?>">
+        <div class="custom-row my-4 <?= $row->is_enabled ? null : 'custom-row-inactive' ?>">
             <div class="row">
                 <div class="col-8 col-lg-5">
                     <div class="d-flex align-items-center">
@@ -197,10 +200,10 @@
                 </div>
 
                 <div class="col col-lg-2 d-none d-lg-flex justify-content-lg-end align-items-center">
-                    <small class="text-muted" data-toggle="tooltip" title="<?= language()->links->datetime ?>"><i class="fa fa-fw fa-calendar-alt fa-sm mr-1"></i> <span class="align-middle"><?= \Altum\Date::get($row->datetime, 2) ?></span></small>
+                    <small class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->datetime) ?>"><i class="fa fa-fw fa-calendar-alt fa-sm mr-1"></i> <span class="align-middle"><?= \Altum\Date::get($row->datetime, 2) ?></span></small>
                 </div>
 
-                <div class="col-2 col-lg-1 d-flex justify-content-center justify-content-lg-end align-items-center">
+                <div class="col-4 col-lg-2 d-flex justify-content-center justify-content-lg-end align-items-center">
                     <div class="custom-control custom-switch" data-toggle="tooltip" title="<?= language()->links->is_enabled_tooltip ?>">
                         <input
                                 type="checkbox"
@@ -212,20 +215,32 @@
                         >
                         <label class="custom-control-label clickable" for="link_is_enabled_<?= $row->link_id ?>"></label>
                     </div>
-                </div>
 
-                <div class="col-2 col-lg-1 d-flex justify-content-center justify-content-lg-end align-items-center">
+                    <button
+                            id="url_copy"
+                            type="button"
+                            class="btn btn-link text-muted"
+                            data-toggle="tooltip"
+                            title="<?= language()->global->clipboard_copy ?>"
+                            aria-label="<?= language()->global->clipboard_copy ?>"
+                            data-copy="<?= language()->global->clipboard_copy ?>"
+                            data-copied="<?= language()->global->clipboard_copied ?>"
+                            data-clipboard-text="<?= $row->full_url ?>"
+                    >
+                        <i class="fa fa-fw fa-sm fa-copy"></i>
+                    </button>
+
                     <div class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="text-secondary dropdown-toggle dropdown-toggle-simple">
-                            <i class="fa fa-ellipsis-v"></i>
+                        <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown">
+                            <i class="fa fa-fw fa-ellipsis-v"></i>
+                        </button>
 
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="<?= url('link/' . $row->link_id) ?>" class="dropdown-item"><i class="fa fa-fw fa-pencil-alt"></i> <?= language()->global->edit ?></a>
-                                <a href="<?= url('link/' . $row->link_id . '/statistics') ?>" class="dropdown-item"><i class="fa fa-fw fa-chart-bar"></i> <?= language()->link->statistics->link ?></a>
-                                <a href="<?= $row->full_url . '?export=qr' ?>" target="_blank" class="dropdown-item"><i class="fa fa-fw fa-qrcode"></i> <?= language()->link->qr->link ?></a>
-                                <a href="#" data-toggle="modal" data-target="#link_delete" class="dropdown-item" data-link-id="<?= $row->link_id ?>"><i class="fa fa-fw fa-times"></i> <?= language()->global->delete ?></a>
-                            </div>
-                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="<?= url('link/' . $row->link_id) ?>" class="dropdown-item"><i class="fa fa-fw fa-pencil-alt"></i> <?= language()->global->edit ?></a>
+                            <a href="<?= url('link/' . $row->link_id . '/statistics') ?>" class="dropdown-item"><i class="fa fa-fw fa-chart-bar"></i> <?= language()->link->statistics->link ?></a>
+                            <a href="<?= url('link/' . $row->link_id . '/qr') ?>" class="dropdown-item"><i class="fa fa-fw fa-qrcode"></i> <?= language()->link->qr->link ?></a>
+                            <a href="#" data-toggle="modal" data-target="#link_delete" class="dropdown-item" data-link-id="<?= $row->link_id ?>"><i class="fa fa-fw fa-times"></i> <?= language()->global->delete ?></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -237,8 +252,10 @@
 <?php else: ?>
 
     <div class="d-flex flex-column align-items-center justify-content-center mt-5">
-        <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-4" alt="<?= language()->links->no_data ?>" />
+        <img src="<?= ASSETS_FULL_URL . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-4" alt="<?= language()->links->no_data ?>" />
         <h2 class="h4 text-muted mb-4"><?= language()->links->no_data ?></h2>
     </div>
 
 <?php endif ?>
+
+<?php include_view(THEME_PATH . 'views/partials/clipboard_js.php') ?>

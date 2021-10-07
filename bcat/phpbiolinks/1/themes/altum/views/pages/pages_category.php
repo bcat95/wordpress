@@ -24,11 +24,7 @@
             <h1><?= $data->pages_category->title ?></h1>
         </div>
 
-        <div class="d-print-none col-auto p-0 d-flex align-items-center">
-            <?php if(\Altum\Middlewares\Authentication::is_admin()): ?>
-                <?= include_view(THEME_PATH . 'views/admin/pages/admin_pages_category_dropdown_button.php', ['id' => $data->pages_category->pages_category_id]) ?>
-            <?php endif ?>
-        </div>
+        <div class="d-print-none col-auto p-0 d-flex align-items-center"></div>
     </div>
     <p class="text-muted"><?= $data->pages_category->description ?></p>
 

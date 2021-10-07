@@ -4,11 +4,11 @@
 
 <div class="container">
     <div class="d-flex flex-column align-items-center">
-        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-5 px-0">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-5">
             <?= \Altum\Alerts::output_alerts() ?>
 
             <div class="card border-0">
-                <div class="card-body">
+                <div class="card-body p-5">
                     <h4 class="card-title"><?= language()->login->header ?></h4>
 
                     <form action="" method="post" class="mt-4" role="form">
@@ -47,13 +47,23 @@
                             <button type="submit" name="submit" class="btn btn-primary btn-block my-1"><?= language()->login->form->login ?></button>
                         </div>
 
-                        <div class="row">
-                            <?php if(settings()->facebook->is_enabled): ?>
-                                <div class="col-sm mt-1">
-                                    <a href="<?= $data->facebook_login_url ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->facebook, "<i class=\"fab fa-fw fa-facebook\"></i>") ?></a>
-                                </div>
-                            <?php endif ?>
-                        </div>
+                        <?php if(settings()->facebook->is_enabled): ?>
+                            <div class="mt-2">
+                                <a href="<?= url('login/facebook-initiate') ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->facebook, "<i class=\"fab fa-fw fa-facebook\"></i>") ?></a>
+                            </div>
+                        <?php endif ?>
+
+                        <?php if(settings()->google->is_enabled): ?>
+                            <div class="mt-2">
+                                <a href="<?= url('login/google-initiate') ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->google, "<i class=\"fab fa-fw fa-google\"></i>") ?></a>
+                            </div>
+                        <?php endif ?>
+
+                        <?php if(settings()->twitter->is_enabled): ?>
+                            <div class="mt-2">
+                                <a href="<?= url('login/twitter-initiate') ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->twitter, "<i class=\"fab fa-fw fa-twitter\"></i>") ?></a>
+                            </div>
+                        <?php endif ?>
 
                         <div class="mt-4 text-center">
                             <small><a href="lost-password" class="text-muted" role="button"><?= language()->login->display->lost_password ?></a> / <a href="resend-activation" class="text-muted" role="button"><?= language()->login->display->resend_activation ?></a></small>
@@ -64,7 +74,7 @@
         </div>
 
         <?php if(settings()->register_is_enabled): ?>
-            <div class="text-center mt-4 mb-2">
+            <div class="text-center mt-4">
                 <?= sprintf(language()->login->display->register, '<a href="' . url('register') . '" class="font-weight-bold">' . language()->login->display->register_help . '</a>') ?></a>
             </div>
         <?php endif ?>

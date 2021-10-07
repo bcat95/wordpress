@@ -2,7 +2,7 @@
 
 <div data-biolink-block-id="<?= $data->link->biolink_block_id ?>" class="col-12 my-2">
     <div class="link-iframe-round">
-        <blockquote class="tiktok-embed" data-video-id="<?= $data->embed ?>">
+        <blockquote class="link-round" data-video-id="<?= $data->embed ?>">
             <section></section>
         </blockquote>
 

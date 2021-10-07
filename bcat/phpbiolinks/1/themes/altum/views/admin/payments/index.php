@@ -85,6 +85,7 @@
                                 <option value="stripe" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'stripe' ? 'selected="selected"' : null ?>><?= language()->pay->custom_plan->stripe ?></option>
                                 <option value="paypal" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'paypal' ? 'selected="selected"' : null ?>><?= language()->pay->custom_plan->paypal ?></option>
                                 <option value="offline_payment" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'offline_payment' ? 'selected="selected"' : null ?>><?= language()->pay->custom_plan->offline_payment ?></option>
+                                <option value="coinbase" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'coinbase' ? 'selected="selected"' : null ?>><?= language()->pay->custom_plan->coinbase ?></option>
                             </select>
                         </div>
 
@@ -127,7 +128,7 @@
                         </div>
 
                         <div class="form-group px-4 mt-4">
-                            <button type="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
+                            <button type="submit" name="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
                         </div>
                     </form>
 
@@ -152,6 +153,7 @@
         </thead>
         <tbody>
         <?php foreach($data->payments as $row): ?>
+            <?php //ALTUMCODE:DEMO if(DEMO) {$row->email = $row->user_email = 'hidden@demo.com'; $row->name = $row->user_name = 'hidden on demo';} ?>
             <tr>
                 <td>
                     <div class="d-flex flex-column">
@@ -201,3 +203,6 @@
 </div>
 
 <div class="mt-3"><?= $data->pagination ?></div>
+
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/payments/payment_delete_modal.php'), 'modals'); ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/payments/payment_approve_modal.php'), 'modals'); ?>

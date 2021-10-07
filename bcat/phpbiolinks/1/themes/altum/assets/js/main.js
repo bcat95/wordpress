@@ -1,30 +1,26 @@
-/* Submit disable after 1 click */
-$('[type=submit][name=submit]').on('click', (event) => {
-    $(event.currentTarget).addClass('disabled');
+'use strict';
 
-    let text = $(event.currentTarget).text();
-    let loader = '<div class="spinner-grow spinner-grow-sm"><span class="sr-only">Loading...</span></div>';
-    $(event.currentTarget).html(loader);
+/* Temporarily disable the form submission button to avoid multiple submissions */
+document.querySelectorAll('[type="submit"][name="submit"]').forEach(element => {
+    element.addEventListener('click', event => {
+        let button = event.currentTarget;
 
-    setTimeout(() => {
-        $(event.currentTarget).removeClass('disabled');
-        $(event.currentTarget).text(text);
-    }, 3000);
+        /* Disable the button */
+        button.classList.add('disabled');
 
-});
+        /* Save the current button text */
+        let current_button_text = button.innerText;
 
-/* Confirm delete handler */
-$('body').on('click', '[data-confirm]', (event) => {
-    let message = $(event.currentTarget).attr('data-confirm');
+        /* Show a loading spinner instead of the text */
+        button.innerHTML = '<div class="spinner-grow spinner-grow-sm" role="status"></div>';
 
-    if(!confirm(message)) return false;
-});
+        /* Go back to the button default state */
+        setTimeout(() => {
+            button.classList.remove('disabled');
+            button.innerText = current_button_text;
+        }, 2500);
 
-/* Custom links */
-$('[data-href]').on('click', event => {
-    let url = $(event.currentTarget).data('href');
-
-    fade_out_redirect({ url, full: true });
+    });
 });
 
 /* Enable tooltips everywhere */

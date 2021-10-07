@@ -17,7 +17,7 @@
                     <form action="" method="post" class="mt-4" role="form">
                         <div class="form-group">
                             <label for="email"><?= language()->resend_activation->email ?></label>
-                            <input id="email" type="text" name="email" class="form-control <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" required="required" autofocus="autofocus" />
+                            <input id="email" type="email" name="email" class="form-control <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" required="required" autofocus="autofocus" />
                             <?= \Altum\Alerts::output_field_error('email') ?>
                         </div>
 

@@ -2,7 +2,7 @@
 
 <div class="d-flex justify-content-between mb-4">
     <div class="d-flex align-items-center">
-        <h1 class="h3 mr-3"><i class="fa fa-fw fa-xs fa-tags text-primary-900 mr-2"></i> <?= language()->admin_code_update->header ?></h1>
+        <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-tags text-primary-900 mr-2"></i> <?= language()->admin_code_update->header ?></h1>
 
         <?= include_view(THEME_PATH . 'views/admin/codes/admin_code_dropdown_button.php', ['id' => $data->code->code_id]) ?>
     </div>
@@ -113,4 +113,7 @@
     document.querySelector('select[name="type"]').addEventListener('change', checker);
 </script>
 <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>
+
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/codes/code_delete_modal.php'), 'modals'); ?>
+
 

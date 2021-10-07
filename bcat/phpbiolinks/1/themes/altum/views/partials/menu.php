@@ -3,14 +3,14 @@
 <nav id="navbar" class="
     navbar
     navbar-main
-    <?= \Altum\Routing\Router::$controller_settings['menu_margin'] ? 'mb-3' : null ?>
+    <?= \Altum\Routing\Router::$controller_settings['menu_margin'] ? 'mb-6' : null ?>
     navbar-expand-lg
     navbar-light
 ">
     <div class="container">
         <a class="navbar-brand" href="<?= url() ?>">
             <?php if(settings()->logo != ''): ?>
-                <img src="<?= SITE_URL . UPLOADS_URL_PATH . 'logo/' . settings()->logo ?>" class="img-fluid navbar-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
+                <img src="<?= UPLOADS_FULL_URL . 'logo/' . settings()->logo ?>" class="img-fluid navbar-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
             <?php else: ?>
                 <?= settings()->title ?>
             <?php endif ?>
@@ -27,6 +27,11 @@
                 <li class="nav-item"><a class="nav-link" href="<?= $data->url ?>" target="<?= $data->target ?>"><?= $data->title ?></a></li>
                 <?php endforeach ?>
 
+                <?php if(settings()->payment->is_enabled): ?>
+                    <?php if(\Altum\Plugin::is_active('affiliate') && settings()->affiliate->is_enabled): ?>
+                        <li class="nav-item"><a class="nav-link" href="<?= url('affiliate') ?>"> <?= language()->affiliate->menu ?></a></li>
+                    <?php endif ?>
+                <?php endif ?>
 
                 <?php if(\Altum\Middlewares\Authentication::check()): ?>
 
@@ -51,12 +56,18 @@
 
                             <a class="dropdown-item" href="<?= url('pixels') ?>"><i class="fa fa-fw fa-sm fa-adjust mr-1"></i> <?= language()->pixels->menu ?></a>
 
+                            <div class="dropdown-divider"></div>
+
                             <a class="dropdown-item" href="<?= url('account') ?>"><i class="fa fa-fw fa-sm fa-wrench mr-1"></i> <?= language()->account->menu ?></a>
 
                             <a class="dropdown-item" href="<?= url('account-plan') ?>"><i class="fa fa-fw fa-sm fa-box-open mr-1"></i> <?= language()->account_plan->menu ?></a>
 
                             <?php if(settings()->payment->is_enabled): ?>
                             <a class="dropdown-item" href="<?= url('account-payments') ?>"><i class="fa fa-fw fa-sm fa-dollar-sign mr-1"></i> <?= language()->account_payments->menu ?></a>
+
+                                <?php if(\Altum\Plugin::is_active('affiliate') && settings()->affiliate->is_enabled): ?>
+                                    <a class="dropdown-item" href="<?= url('referrals') ?>"><i class="fa fa-fw fa-sm fa-wallet mr-1"></i> <?= language()->referrals->menu ?></a>
+                                <?php endif ?>
                             <?php endif ?>
 
                             <a class="dropdown-item" href="<?= url('account-api') ?>"><i class="fa fa-fw fa-sm fa-code mr-1"></i> <?= language()->account_api->menu ?></a>

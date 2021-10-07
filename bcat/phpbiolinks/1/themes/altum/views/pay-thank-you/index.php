@@ -3,46 +3,23 @@
 <?php require THEME_PATH . 'views/partials/ads_header.php' ?>
 
 <div class="container">
-
     <?= \Altum\Alerts::output_alerts() ?>
 
-    <div class="d-flex flex-column align-items-center justify-content-center">
-        <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/thank_you.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-4" alt="<?= language()->pay_thank_you->header ?>" />
+    <div class="d-flex flex-column align-items-center justify-content-center text-center">
+        <img src="<?= ASSETS_FULL_URL . 'images/thank_you.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-4" alt="<?= language()->pay_thank_you->header ?>" />
 
         <h1><?= language()->pay_thank_you->header ?></h1>
 
-        <?php if($data->plan_id == 'trial'): ?>
-
-            <p class="text-muted"><?= language()->pay_thank_you->plan_trial_start ?></p>
-
-        <?php elseif(is_numeric($data->plan_id)): ?>
-
-            <?php if($_GET['payment_processor'] == 'stripe'): ?>
-
-                <p class="text-muted"><?= language()->pay_thank_you->plan_custom_will_start ?></p>
-
-            <?php elseif($_GET['payment_processor'] == 'paypal'): ?>
-
-                <?php if($_GET['payment_type'] == 'one_time'): ?>
-                    <p class="text-muted"><?= language()->pay_thank_you->plan_custom_start ?></p>
-
-                <?php elseif($_GET['payment_type'] == 'recurring'): ?>
-                    <p class="text-muted"><?= language()->pay_thank_you->plan_custom_will_start ?></p>
-                <?php endif ?>
-
-            <?php elseif($_GET['payment_processor'] == 'offline_payment'): ?>
-
-                <p class="text-muted"><?= language()->pay_thank_you->plan_custom_pending ?></p>
-
-            <?php endif ?>
-
+        <?php if(isset($_GET['payment_processor']) && in_array($_GET['payment_processor'], ['paypal', 'stripe'])): ?>
+            <p class="text-muted"><?= language()->pay_thank_you->plan_custom_will_start ?></p>
+        <?php elseif(isset($_GET['payment_processor']) && $_GET['payment_processor'] == 'offline_payment'): ?>
+            <p class="text-muted"><?= language()->pay_thank_you->plan_custom_pending ?></p>
+        <?php else: ?>
+            <p class="text-muted"><?= sprintf(language()->pay_thank_you->plan_trial_start, \Altum\Database\Database::clean_string($_GET['trial_days'])) ?></p>
         <?php endif ?>
 
         <a href="<?= url('dashboard') ?>" class="btn btn-outline-primary mt-4"><?= language()->pay_thank_you->button ?></a>
-
     </div>
-
-
 </div>
 
 <?php ob_start() ?>

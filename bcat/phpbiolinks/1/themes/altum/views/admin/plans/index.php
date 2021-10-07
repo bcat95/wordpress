@@ -15,8 +15,8 @@
         <thead>
         <tr>
             <th><?= language()->admin_plans->table->name ?></th>
-            <th><?= language()->admin_plans->table->monthly_price ?></th>
-            <th><?= language()->admin_plans->table->annual_price ?></th>
+            <th><?= language()->admin_plans->table->price ?></th>
+            <th><?= language()->admin_plans->table->order ?></th>
             <th><?= language()->admin_plans->table->users ?></th>
             <th><?= language()->admin_plans->table->status ?></th>
             <th></th>
@@ -50,32 +50,7 @@
 
         <tr>
             <td>
-                <a href="<?= url('admin/plan-update/trial') ?>"><?= settings()->plan_trial->name ?></a>
-                <a href="<?= url('pay/trial') ?>" target="_blank" rel="noreferrer"><i class="fa fa-fw fa-xs fa-external-link-alt ml-1"></i></a>
-            </td>
-            <td>-</td>
-            <td>-</td>
-            <td>
-                <i class="fa fa-fw fa-users text-muted"></i>
-                <a href="<?= url('admin/users?plan_id=trial') ?>">
-                    <?= nr(database()->query("SELECT COUNT(*) AS `total` FROM `users` WHERE `plan_id` = 'trial'")->fetch_object()->total ?? 0) ?>
-                </a>
-            </td>
-            <td>
-                <?php if(settings()->plan_trial->status == 0): ?>
-                    <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->global->disabled ?></span>
-                <?php elseif(settings()->plan_trial->status == 1): ?>
-                    <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->global->active ?></span>
-                <?php else: ?>
-                    <span class="badge badge-pill badge-info"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->global->hidden ?></span>
-                <?php endif ?>
-            </td>
-            <td><?= include_view(THEME_PATH . 'views/admin/plans/admin_plan_dropdown_button.php', ['id' => 'trial']) ?></td>
-        </tr>
-
-        <tr>
-            <td>
-                <?= settings()->plan_custom->name ?>
+                <a href="<?= url('admin/plan-update/custom') ?>"><?= settings()->plan_custom->name ?></a>
                 <span data-toggle="tooltip" title="<?= language()->admin_plans->table->custom_help ?>"><i class="fa fa-fw fa-info-circle text-muted"></i></span>
             </td>
             <td>-</td>
@@ -86,8 +61,16 @@
                     <?= nr(database()->query("SELECT COUNT(*) AS `total` FROM `users` WHERE `plan_id` = 'custom'")->fetch_object()->total ?? 0) ?>
                 </a>
             </td>
-            <td><span class="badge badge-pill badge-info"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->global->hidden ?></span></td>
-            <td></td>
+            <td>
+                <?php if(settings()->plan_custom->status == 0): ?>
+                    <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->global->disabled ?></span>
+                <?php elseif(settings()->plan_custom->status == 1): ?>
+                    <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->global->active ?></span>
+                <?php else: ?>
+                    <span class="badge badge-pill badge-info"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->global->hidden ?></span>
+                <?php endif ?>
+            </td>
+            <td><?= include_view(THEME_PATH . 'views/admin/plans/admin_plan_dropdown_button.php', ['id' => 'custom']) ?></td>
         </tr>
 
         <?php foreach($data->plans as $row): ?>
@@ -99,8 +82,14 @@
                         <a href="<?= url('pay/' . $row->plan_id) ?>" target="_blank" rel="noreferrer"><i class="fa fa-fw fa-xs fa-external-link-alt ml-1"></i></a>
                     <?php endif ?>
                 </td>
-                <td><?= $row->monthly_price . ' ' . settings()->payment->currency ?></td>
-                <td><?= $row->annual_price . ' ' . settings()->payment->currency ?></td>
+                <td>
+                    <div class="d-flex flex-column text-muted small">
+                        <span><?= $row->monthly_price . ' ' . settings()->payment->currency . ' ' . language()->admin_plans->table->monthly ?></span>
+                        <span><?= $row->annual_price . ' ' . settings()->payment->currency . ' ' . language()->admin_plans->table->annual ?></span>
+                        <span><?= $row->lifetime_price . ' ' . settings()->payment->currency . ' ' . language()->admin_plans->table->lifetime ?></span>
+                    </div>
+                </td>
+                <td class="text-muted"><?= $row->order ?></td>
                 <td>
                     <i class="fa fa-fw fa-users text-muted"></i>
                     <a href="<?= url('admin/users?plan_id=' . $row->plan_id) ?>">
@@ -123,3 +112,5 @@
         </tbody>
     </table>
 </div>
+
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/plans/plan_delete_modal.php'), 'modals'); ?>

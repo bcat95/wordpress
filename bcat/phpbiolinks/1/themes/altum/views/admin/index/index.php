@@ -141,6 +141,7 @@
             </thead>
             <tbody>
             <?php while($row = $result->fetch_object()): ?>
+                <?php //ALTUMCODE:DEMO if(DEMO) {$row->email = 'hidden@demo.com'; $row->name = 'hidden on demo';} ?>
                 <?php if(!isset($data->plans[$row->plan_id])) $data->plans[$row->plan_id] = (new \Altum\Models\Plan())->get_plan_by_id($row->plan_id) ?>
                 <tr>
                     <td>
@@ -159,11 +160,11 @@
                     <td>
                         <?php if($row->active == 0): ?>
                         <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_user_update->main->is_enabled_unconfirmed ?>
-                            <?php elseif($row->active == 1): ?>
-                            <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_user_update->main->is_enabled_active ?>
-                                <?php elseif($row->active == 2): ?>
-                            <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_user_update->main->is_enabled_disabled ?>
-                                <?php endif ?>
+                        <?php elseif($row->active == 1): ?>
+                        <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_user_update->main->is_enabled_active ?>
+                        <?php elseif($row->active == 2): ?>
+                        <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_user_update->main->is_enabled_disabled ?>
+                        <?php endif ?>
                     </td>
                     <td>
                         <div class="d-flex flex-column">
@@ -191,7 +192,7 @@
                             </span>
 
                             <?php if($row->country): ?>
-                                <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/countries/' . mb_strtolower($row->country) . '.svg' ?>" class="img-fluid icon-favicon mr-2" data-toggle="tooltip" title="<?= get_country_from_country_code($row->country) ?>" />
+                                <img src="<?= ASSETS_FULL_URL . 'images/countries/' . mb_strtolower($row->country) . '.svg' ?>" class="img-fluid icon-favicon mr-2" data-toggle="tooltip" title="<?= get_country_from_country_code($row->country) ?>" />
                             <?php else: ?>
                                 <span class="mr-2" data-toggle="tooltip" title="<?= language()->admin_users->table->country_unknown ?>">
                                     <i class="fa fa-fw fa-globe text-muted"></i>
@@ -225,6 +226,7 @@
                     </thead>
                     <tbody>
                     <?php while($row = $result->fetch_object()): ?>
+                        <?php //ALTUMCODE:DEMO if(DEMO) {$row->email = $row->user_email = 'hidden@demo.com'; $row->user_name = $row->name = 'hidden on demo';} ?>
 
                         <tr>
                             <td>
@@ -254,9 +256,9 @@
                                 <div class="d-flex flex-column">
                                     <span class=""><?= nr($row->total_amount, 2) . ' ' . $row->currency ?></span>
                                     <div>
-                            <span class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->date) ?>">
-                                <?= \Altum\Date::get($row->date, 2) ?>
-                            </span>
+                                        <span class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->date) ?>">
+                                            <?= \Altum\Date::get($row->date, 2) ?>
+                                        </span>
                                     </div>
                                 </div>
                             </td>
@@ -292,6 +294,18 @@
             </div>
             <div class="col-12 col-md-6">
                 <a href="<?= PRODUCT_DOCUMENTATION_URL ?>" target="_blank"><?= PRODUCT_NAME ?> Documentation</a>
+            </div>
+        </div>
+
+        <div class="row my-3">
+            <div class="col-12 col-md-6">
+                <span class="font-weight-bold">
+                    <i class="fa fa-fw fa-question-circle fa-sm mr-1"></i> Support
+                </span>
+            </div>
+            <div class="col-12 col-md-6">
+                <a href="https://altumcode.com/contact" target="_blank">support@altumcode.com</a><br />
+                <span class="text-muted">Provide proof of purchase when requesting support, otherwise your email can be discarded.</span>
             </div>
         </div>
 

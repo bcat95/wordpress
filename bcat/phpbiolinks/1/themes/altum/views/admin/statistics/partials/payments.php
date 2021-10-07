@@ -4,6 +4,14 @@
 <div class="card">
     <div class="card-body">
         <h2 class="h4"><i class="fa fa-fw fa-dollar-sign fa-xs text-muted"></i> <?= language()->admin_statistics->payments->header ?></h2>
+        <div class="d-flex flex-column flex-xl-row">
+            <div class="mb-2 mb-xl-0 mr-4">
+                <span class="font-weight-bold"><?= nr($data->total['total_payments']) ?></span> <?= language()->admin_statistics->payments->chart_total_payments ?>
+            </div>
+            <div class="mb-2 mb-xl-0 mr-4">
+                <span class="font-weight-bold"><?= nr($data->total['total_amount'], 2) . ' ' . settings()->payment->currency ?></span> <?= language()->admin_statistics->payments->chart_total_amount ?>
+            </div>
+        </div>
 
         <div class="chart-container">
             <canvas id="payments"></canvas>

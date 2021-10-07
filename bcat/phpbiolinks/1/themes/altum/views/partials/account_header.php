@@ -35,6 +35,14 @@
             <i class="fa fa-fw fa-sm fa-dollar-sign mr-1"></i> <?= language()->account_payments->menu ?>
         </a>
     </li>
+
+        <?php if(\Altum\Plugin::is_active('affiliate') && settings()->affiliate->is_enabled): ?>
+            <li class="nav-item my-1 my-lg-0 mr-lg-2">
+                <a class="nav-link <?= \Altum\Routing\Router::$controller_key == 'referrals' ? 'active' : null ?>" href="<?= url('referrals') ?>">
+                    <i class="fa fa-fw fa-sm fa-wallet mr-1"></i> <?= language()->referrals->menu ?>
+                </a>
+            </li>
+        <?php endif ?>
     <?php endif ?>
 
     <li class="nav-item my-1 my-lg-0 mr-lg-2">

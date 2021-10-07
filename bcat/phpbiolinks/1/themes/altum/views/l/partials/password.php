@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label for="password"><?= language()->link->password->input ?></label>
                         <input type="password" id="password" name="password" value="" class="form-control <?= \Altum\Alerts::has_field_errors('password') ? 'is-invalid' : null ?>" required="required" />
-                        <?= \Altum\Alerts::output_field_error('new_password') ?>
+                        <?= \Altum\Alerts::output_field_error('password') ?>
                     </div>
 
                     <button type="submit" name="submit" class="btn btn-block btn-primary mt-4"><?= language()->global->submit ?></button>

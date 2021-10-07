@@ -29,6 +29,6 @@
 </section>
 
 <?php ob_start() ?>
-<link href="<?= SITE_URL . ASSETS_URL_PATH . 'css/daterangepicker.min.css' ?>" rel="stylesheet" media="screen,print">
+<link href="<?= ASSETS_FULL_URL . 'css/daterangepicker.min.css' ?>" rel="stylesheet" media="screen,print">
 <?php \Altum\Event::add_content(ob_get_clean(), 'head') ?>
 

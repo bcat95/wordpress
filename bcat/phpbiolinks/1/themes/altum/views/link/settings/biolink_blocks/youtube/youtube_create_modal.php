@@ -18,13 +18,13 @@
                     <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" required="required" />
                     <input type="hidden" name="request_type" value="create" />
                     <input type="hidden" name="link_id" value="<?= $data->link->link_id ?>" />
-                    <input type="hidden" name="type" value="youtube" />
+                    <input type="hidden" name="block_type" value="youtube" />
 
                     <div class="notification-container"></div>
 
                     <div class="form-group">
-                        <label><i class="fa fa-fw fa-signature fa-sm mr-1"></i> <?= language()->create_biolink_youtube_modal->input->location_url ?></label>
-                        <input type="text" class="form-control" name="location_url" required="required" placeholder="<?= language()->create_biolink_youtube_modal->input->location_url_placeholder ?>" />
+                        <label for="youtube_location_url"><i class="fa fa-fw fa-signature fa-sm mr-1"></i> <?= language()->create_biolink_youtube_modal->location_url ?></label>
+                        <input id="youtube_location_url" type="text" class="form-control" name="location_url" required="required" placeholder="<?= language()->create_biolink_youtube_modal->location_url_placeholder ?>" />
                     </div>
 
                     <div class="text-center mt-4">
@@ -36,38 +36,3 @@
         </div>
     </div>
 </div>
-
-
-<?php ob_start() ?>
-<script>
-    $('form[name="create_biolink_youtube"]').on('submit', event => {
-
-        $.ajax({
-            type: 'POST',
-            url: 'biolink-block-ajax',
-            data: $(event.currentTarget).serialize(),
-            success: (data) => {
-                if(data.status == 'error') {
-
-                    let notification_container = $(event.currentTarget).find('.notification-container');
-
-                    notification_container.html('');
-
-                    display_notifications(data.message, 'error', notification_container);
-
-                }
-
-                else if(data.status == 'success') {
-
-                    /* Fade out refresh */
-                    fade_out_redirect({ url: data.details.url, full: true });
-
-                }
-            },
-            dataType: 'json'
-        });
-
-        event.preventDefault();
-    })
-</script>
-<?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>

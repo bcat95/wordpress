@@ -28,14 +28,14 @@
 
 
     <div class="d-flex flex-column align-items-center justify-content-center">
-        <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/no_rows.svg' ?>" class="col-10 col-md-7 col-lg-5 mb-3" alt="<?= language()->link->statistics->no_data ?>" />
+        <img src="<?= ASSETS_FULL_URL . 'images/no_rows.svg' ?>" class="col-10 col-md-7 col-lg-5 mb-3" alt="<?= language()->link->statistics->no_data ?>" />
         <h2 class="h4 text-muted mt-3"><?= language()->link->statistics->no_data ?></h2>
         <p class="text-muted"><?= language()->link->statistics->no_data_help ?></p>
     </div>
 
 <?php else: ?>
 
-    <div class="chart-container mb-5 bg-white">
+    <div class="chart-container mb-5">
         <canvas id="pageviews_chart"></canvas>
     </div>
 
@@ -95,11 +95,11 @@
 <?php endif ?>
 
 <?php ob_start() ?>
-<script src="<?= SITE_URL . ASSETS_URL_PATH . 'js/libraries/Chart.bundle.min.js' ?>"></script>
-<script src="<?= SITE_URL . ASSETS_URL_PATH . 'js/libraries/moment.min.js' ?>"></script>
-<script src="<?= SITE_URL . ASSETS_URL_PATH . 'js/libraries/daterangepicker.min.js' ?>"></script>
-<script src="<?= SITE_URL . ASSETS_URL_PATH . 'js/libraries/moment-timezone-with-data-10-year-range.min.js' ?>"></script>
-<script src="<?= SITE_URL . ASSETS_URL_PATH . 'js/chartjs_defaults.js' ?>"></script>
+<script src="<?= ASSETS_FULL_URL . 'js/libraries/Chart.bundle.min.js' ?>"></script>
+<script src="<?= ASSETS_FULL_URL . 'js/libraries/moment.min.js' ?>"></script>
+<script src="<?= ASSETS_FULL_URL . 'js/libraries/daterangepicker.min.js' ?>"></script>
+<script src="<?= ASSETS_FULL_URL . 'js/libraries/moment-timezone-with-data-10-year-range.min.js' ?>"></script>
+<script src="<?= ASSETS_FULL_URL . 'js/chartjs_defaults.js' ?>"></script>
 
 <script>
     'use strict';

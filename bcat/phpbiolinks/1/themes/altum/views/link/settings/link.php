@@ -25,7 +25,7 @@
                         <?php if(count($data->domains)): ?>
                             <select name="domain_id" class="appearance-none select-custom-altum form-control input-group-text">
                                 <?php if(settings()->links->main_domain_is_enabled || \Altum\Middlewares\Authentication::is_admin()): ?>
-                                    <option value="" <?= $data->link->domain ? 'selected="selected"' : null ?>><?= url() ?></option>
+                                    <option value="" <?= $data->link->domain ? 'selected="selected"' : null ?>><?= SITE_URL ?></option>
                                 <?php endif ?>
 
                                 <?php foreach($data->domains as $row): ?>
@@ -33,7 +33,7 @@
                                 <?php endforeach ?>
                             </select>
                         <?php else: ?>
-                            <span class="input-group-text"><?= url() ?></span>
+                            <span class="input-group-text"><?= SITE_URL ?></span>
                         <?php endif ?>
                     </div>
 
@@ -51,7 +51,10 @@
             </div>
 
             <div class="form-group">
-                <label for="settings_project_id"><i class="fa fa-fw fa-project-diagram fa-sm mr-1"></i> <?= language()->link->settings->project_id ?></label>
+                <label for="settings_project_id">
+                    <i class="fa fa-fw fa-project-diagram fa-sm mr-1"></i> <?= language()->link->settings->project_id ?>
+                    <a href="<?= url('projects') ?>" target="_blank" class="ml-3 small"><?= language()->projects->create ?></a>
+                </label>
                 <select id="settings_project_id" name="project_id" class="form-control">
                     <option value=""><?= language()->link->settings->project_id_null ?></option>
                     <?php foreach($data->projects as $row): ?>
@@ -67,7 +70,7 @@
 
                 <div class="collapse" id="pixels_container">
                     <div class="mb-3">
-                        <div><i class="fa fa-fw fa-sm fa-adjust text-muted mr-1"></i><?= language()->link->settings->pixels_ids ?></div>
+                        <div><i class="fa fa-fw fa-sm fa-adjust text-muted mr-1"></i><?= language()->link->settings->pixels_ids ?> <a href="<?= url('pixels') ?>" target="_blank" class="ml-3 small"><?= language()->pixels->create ?></a></div>
 
                         <div class="row">
                             <?php foreach($data->pixels as $pixel): ?>
@@ -122,6 +125,7 @@
                                                 value="<?= \Altum\Date::get($data->link->start_date, 1) ?>"
                                                 placeholder="<?= language()->link->settings->start_date ?>"
                                                 autocomplete="off"
+                                                data-daterangepicker
                                         >
                                     </div>
                                 </div>
@@ -136,6 +140,7 @@
                                                 value="<?= \Altum\Date::get($data->link->end_date, 1) ?>"
                                                 placeholder="<?= language()->link->settings->end_date ?>"
                                                 autocomplete="off"
+                                                data-daterangepicker
                                         >
                                     </div>
                                 </div>
@@ -495,7 +500,7 @@
 
     /* Daterangepicker */
     let locale = <?= json_encode(require APP_PATH . 'includes/daterangepicker_translations.php') ?>;
-    $('[name="start_date"],[name="end_date"]').daterangepicker({
+    $('[data-daterangepicker]').daterangepicker({
         minDate: new Date(),
         alwaysShowCalendars: true,
         singleCalendar: true,
@@ -524,6 +529,10 @@
                 display_notifications(data.message, data.status, notification_container);
 
                 notification_container[0].scrollIntoView();
+
+                if(data.status == 'success') {
+                    update_main_url(data.details.url);
+                }
             },
             dataType: 'json'
         });

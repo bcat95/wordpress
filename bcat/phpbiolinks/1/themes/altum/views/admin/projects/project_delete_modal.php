@@ -31,7 +31,7 @@
     $('#project_delete_modal').on('show.bs.modal', event => {
         let project_id = $(event.relatedTarget).data('project-id');
 
-        $(event.currentTarget).find('#project_delete_url').attr('href', `${url}admin/status-pages/delete/${project_id}&global_token=${global_token}`);
+        $(event.currentTarget).find('#project_delete_url').attr('href', `${url}admin/projects/delete/${project_id}&global_token=${global_token}`);
     });
 </script>
 <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>

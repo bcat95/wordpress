@@ -2,8 +2,8 @@
 
 <?php require THEME_PATH . 'views/partials/ads_header.php' ?>
 
-<div class="container text-center">
-    <div class="d-flex flex-row align-items-center justify-content-center">
+<div class="container">
+    <div class="d-flex flex-row align-items-center">
         <div class="mr-3">
             <i class="fa fa-fw fa-eye-slash fa-2x"></i>
         </div>

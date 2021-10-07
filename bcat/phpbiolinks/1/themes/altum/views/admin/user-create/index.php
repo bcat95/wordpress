@@ -20,7 +20,7 @@
 
             <div class="form-group">
                 <label for="email"><?= language()->admin_user_create->form->email ?></label>
-                <input id="email" type="text" name="email" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" placeholder="<?= language()->admin_user_create->form->email_placeholder ?>" required="required" />
+                <input id="email" type="email" name="email" class="form-control form-control-lg <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" placeholder="<?= language()->admin_user_create->form->email_placeholder ?>" required="required" />
                 <?= \Altum\Alerts::output_field_error('email') ?>
             </div>
 

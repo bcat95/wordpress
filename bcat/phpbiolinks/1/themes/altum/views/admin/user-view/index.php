@@ -2,13 +2,15 @@
 
 <div class="d-flex justify-content-between mb-4">
     <div class="d-flex align-items-center">
-        <h1 class="h3 mr-3"><i class="fa fa-fw fa-xs fa-user text-primary-900 mr-2"></i> <?= language()->admin_user_view->header ?></h1>
+        <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-user text-primary-900 mr-2"></i> <?= language()->admin_user_view->header ?></h1>
 
         <?= include_view(THEME_PATH . 'views/admin/users/admin_user_dropdown_button.php', ['id' => $data->user->user_id]) ?>
     </div>
 </div>
 
 <?= \Altum\Alerts::output_alerts() ?>
+
+<?php //ALTUMCODE:DEMO if(DEMO) {$data->user->email = 'hidden@demo.com'; $data->user->name = $data->user->ip = 'hidden on demo';} ?>
 
 <div class="card">
     <div class="card-body">
@@ -216,30 +218,35 @@
     </div>
 </div>
 
-<?php if($data->user_logs_result->num_rows): ?>
-    <h2 class="h4 mt-5"><?= language()->admin_user_view->logs->header ?></h2>
-    <p class="text-muted"><?= language()->admin_user_view->logs->subheader ?></p>
+<div class="my-5 row justify-content-between">
+    <div class="col-12 col-sm-6 mb-4 position-relative">
+        <div class="card d-flex flex-row h-100 overflow-hidden">
+            <div class="card-body">
+                <span class="text-muted"><i class="fa fa-fw fa-sm fa-scroll mr-1"></i> <?= language()->admin_user_view->users_logs ?></span>
+            </div>
 
-    <div class="table-responsive table-custom-container">
-        <table class="table table-custom">
-            <thead>
-            <tr>
-                <th><?= language()->admin_user_view->logs->type ?></th>
-                <th><?= language()->admin_user_view->logs->ip ?></th>
-                <th><?= language()->admin_user_view->logs->date ?></th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <?php while($row = $data->user_logs_result->fetch_object()): ?>
-                <tr>
-                    <td><?= $row->type ?></td>
-                    <td><?= $row->ip ?></td>
-                    <td><span class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->date, 1) ?>"><?= \Altum\Date::get_timeago($row->date) ?></span></td>
-                </tr>
-            <?php endwhile ?>
-
-            </tbody>
-        </table>
+            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
+                <a href="<?= url('admin/users-logs?user_id=' . $data->user->user_id) ?>" class="stretched-link">
+                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
+                </a>
+            </div>
+        </div>
     </div>
-<?php endif ?>
+
+    <div class="col-12 col-sm-6 mb-4 position-relative">
+        <div class="card d-flex flex-row h-100 overflow-hidden">
+            <div class="card-body">
+                <span class="text-muted"><i class="fa fa-fw fa-sm fa-tags mr-1"></i> <?= language()->admin_user_view->redeemed_codes ?></span>
+            </div>
+
+            <div class="bg-gray-200 px-2 d-flex flex-column justify-content-center">
+                <a href="<?= url('admin/redeemed-codes?user_id=' . $data->user->user_id) ?>" class="stretched-link">
+                    <i class="fa fa-fw fa-angle-right text-gray-500"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/users/user_delete_modal.php'), 'modals'); ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/users/user_login_modal.php'), 'modals'); ?>

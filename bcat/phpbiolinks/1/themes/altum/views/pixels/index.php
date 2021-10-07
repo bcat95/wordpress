@@ -22,16 +22,18 @@
 
         <div class="col-12 col-xl-auto d-flex">
             <div>
-            <?php if($this->user->plan_settings->pixels_limit != -1 && $data->pixels_total >= $this->user->plan_settings->pixels_limit): ?>
-                <button type="button" data-confirm="<?= language()->pixels->error_message->pixels_limit ?>"  class="btn btn-primary "><i class="fa fa-fw fa-plus-circle"></i> <?= language()->pixels->create ?></button>
+            <?php if($this->user->plan_settings->pixels_limit != -1 && $data->total_pixels >= $this->user->plan_settings->pixels_limit): ?>
+                <button type="button" data-toggle="tooltip" title="<?= language()->pixels->error_message->pixels_limit ?>" class="btn btn-primary disabled">
+                    <i class="fa fa-fw fa-plus-circle"></i> <?= language()->pixels->create ?>
+                </button>
             <?php else: ?>
-                <button type="button" data-toggle="modal" data-target="#create_pixel" class="btn btn-primary "><i class="fa fa-fw fa-plus-circle"></i> <?= language()->pixels->create ?></button>
+                <button type="button" data-toggle="modal" data-target="#create_pixel" class="btn btn-primary"><i class="fa fa-fw fa-plus-circle"></i> <?= language()->pixels->create ?></button>
             <?php endif ?>
             </div>
 
             <div class="ml-3">
                 <div class="dropdown">
-                    <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?>  filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                    <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                     <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                         <div class="dropdown-header d-flex justify-content-between">
@@ -93,7 +95,7 @@
                             </div>
 
                             <div class="form-group px-4 mt-4">
-                                <button type="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
+                                <button type="submit" name="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
                             </div>
                         </form>
 
@@ -119,19 +121,19 @@
                     </div>
 
                     <div class="col-2 col-lg-2 d-none d-lg-flex justify-content-center justify-content-lg-end align-items-center">
-                        <small class="text-muted" data-toggle="tooltip" title="<?= language()->links->datetime ?>"><i class="fa fa-fw fa-calendar-alt fa-sm mr-1"></i> <span class="align-middle"><?= \Altum\Date::get($row->datetime, 2) ?></span></small>
+                        <small class="text-muted" data-toggle="tooltip" title="<?= \Altum\Date::get($row->datetime) ?>"><i class="fa fa-fw fa-calendar-alt fa-sm mr-1"></i> <span class="align-middle"><?= \Altum\Date::get($row->datetime, 2) ?></span></small>
                     </div>
 
                     <div class="col-2 col-lg-2 d-flex justify-content-center justify-content-lg-end align-items-center">
                     <div class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="text-secondary dropdown-toggle dropdown-toggle-simple">
-                            <i class="fa fa-ellipsis-v"></i>
+                        <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown">
+                            <i class="fa fa-fw fa-ellipsis-v"></i>
+                        </button>
 
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" data-toggle="modal" data-target="#pixel_update" data-pixel-id="<?= $row->pixel_id ?>" data-name="<?= $row->name ?>" data-type="<?= $row->type ?>" data-pixel="<?= $row->pixel ?>" class="dropdown-item"><i class="fa fa-fw fa-pencil-alt"></i> <?= language()->global->edit ?></a>
-                                <a href="#" data-toggle="modal" data-target="#pixel_delete" data-pixel-id="<?= $row->pixel_id ?>" class="dropdown-item"><i class="fa fa-fw fa-times"></i> <?= language()->global->delete ?></a>
-                            </div>
-                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#" data-toggle="modal" data-target="#pixel_update" data-pixel-id="<?= $row->pixel_id ?>" data-name="<?= $row->name ?>" data-type="<?= $row->type ?>" data-pixel="<?= $row->pixel ?>" class="dropdown-item"><i class="fa fa-fw fa-pencil-alt"></i> <?= language()->global->edit ?></a>
+                            <a href="#" data-toggle="modal" data-target="#pixel_delete" data-pixel-id="<?= $row->pixel_id ?>" class="dropdown-item"><i class="fa fa-fw fa-times"></i> <?= language()->global->delete ?></a>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -142,7 +144,7 @@
 
     <?php else: ?>
         <div class="d-flex flex-column align-items-center justify-content-center mt-5">
-            <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-4" alt="<?= language()->pixels->no_data ?>" />
+            <img src="<?= ASSETS_FULL_URL . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-4" alt="<?= language()->pixels->no_data ?>" />
             <h2 class="h4 mb-5 text-muted"><?= language()->pixels->no_data ?></h2>
         </div>
     <?php endif ?>

@@ -18,11 +18,9 @@
         <?php if(settings()->payment->is_enabled): ?>
             <div class="col-auto p-0">
                 <?php if($this->user->plan_id == 'free'): ?>
-                    <a href="<?= url('plan/upgrade') ?>" class="btn btn-primary rounded-pill"><i class="fa fa-fw fa-arrow-up"></i> <?= language()->account->plan->upgrade_plan ?></a>
-                <?php elseif($this->user->plan_id == 'trial'): ?>
-                    <a href="<?= url('plan/renew') ?>" class="btn btn-primary rounded-pill"><i class="fa fa-fw fa-sync-alt"></i> <?= language()->account->plan->renew_plan ?></a>
+                    <a href="<?= url('plan/upgrade') ?>" class="btn btn-primary"><i class="fa fa-fw fa-arrow-up"></i> <?= language()->account->plan->upgrade_plan ?></a>
                 <?php else: ?>
-                    <a href="<?= url('plan/renew') ?>" class="btn btn-primary rounded-pill"><i class="fa fa-fw fa-sync-alt"></i> <?= language()->account->plan->renew_plan ?></a>
+                    <a href="<?= url('plan/renew') ?>" class="btn btn-primary"><i class="fa fa-fw fa-sync-alt"></i> <?= language()->account->plan->renew_plan ?></a>
                 <?php endif ?>
             </div>
         <?php endif ?>
@@ -55,7 +53,7 @@
             </div>
 
             <div class="col-auto">
-                <a href="<?= url('account/cancelsubscription' . \Altum\Middlewares\Csrf::get_url_query()) ?>" class="btn btn-secondary" data-confirm="<?= language()->account_plan->cancel->confirm_message ?>"><?= language()->account_plan->cancel->cancel ?></a>
+                <a href="<?= url('account-plan/cancel_subscription' . \Altum\Middlewares\Csrf::get_url_query()) ?>" class="btn btn-secondary" onclick='return confirm(<?= json_encode(language()->account_plan->cancel->confirm_message) ?>)'><?= language()->account_plan->cancel->cancel ?></a>
             </div>
         </div>
     <?php endif ?>

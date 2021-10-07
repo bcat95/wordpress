@@ -1,18 +1,12 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<?php
-
-use Altum\Middlewares\Authentication;
-
-?>
-
 <?php if(settings()->payment->is_enabled): ?>
 
     <?php
     $plans = [];
     $available_payment_frequencies = [];
 
-    $plans_result = database()->query("SELECT * FROM plans WHERE `status` = 1");
+    $plans_result = database()->query("SELECT * FROM `plans` WHERE `status` = 1 ORDER BY `order`");
 
     while($plan = $plans_result->fetch_object()) {
         $plans[] = $plan;
@@ -53,113 +47,28 @@ use Altum\Middlewares\Authentication;
     <?php endif ?>
 <?php endif ?>
 
-<div class="pricing-container">
-    <div class="pricing">
+<div>
+    <div class="row">
 
         <?php if(settings()->plan_free->status == 1): ?>
 
-            <div class="pricing-plan">
-                <div class="pricing-header">
-                    <span class="pricing-name"><?= settings()->plan_free->name ?></span>
+            <div class="col-12 col-md-6 col-lg-4 p-3">
+                <div class="pricing-plan rounded" style="<?= settings()->plan_free->color ? 'border-color: ' . settings()->plan_free->color : null ?>">
+                    <div class="pricing-header">
+                        <span class="pricing-name"><?= settings()->plan_free->name ?></span>
 
-                    <div class="pricing-price">
-                        <span class="pricing-price-amount"><?= language()->plan->free->price ?></span>
+                        <div class="pricing-price">
+                            <span class="pricing-price-amount"><?= settings()->plan_free->price ?></span>
+                        </div>
+
+                        <div class="pricing-details"><?= settings()->plan_free->description ?></div>
                     </div>
 
-                    <div class="pricing-details">&nbsp;</div>
-                </div>
+                    <div class="pricing-body d-flex flex-column justify-content-between">
+                        <?= include_view(THEME_PATH . 'views/partials/plans_plan_content.php', ['plan_settings' => settings()->plan_free->settings]) ?>
 
-                <div class="pricing-body">
-                    <ul class="pricing-features">
-                        <?php if(settings()->plan_free->settings->projects_limit == -1): ?>
-                            <li>
-                                <div><?= language()->global->plan_settings->unlimited_projects_limit ?></div>
-                            </li>
-                        <?php else: ?>
-                            <li>
-                                <div><?= sprintf(language()->global->plan_settings->projects_limit, settings()->plan_free->settings->projects_limit) ?></div>
-                            </li>
-                        <?php endif ?>
-
-                        <?php if(settings()->plan_free->settings->pixels_limit == -1): ?>
-                            <li>
-                                <div><?= language()->global->plan_settings->unlimited_pixels_limit ?></div>
-                            </li>
-                        <?php else: ?>
-                            <li>
-                                <div><?= sprintf(language()->global->plan_settings->pixels_limit, settings()->plan_free->settings->pixels_limit) ?></div>
-                            </li>
-                        <?php endif ?>
-
-                        <?php if(settings()->plan_free->settings->biolinks_limit == -1): ?>
-                            <li>
-                                <div><?= language()->global->plan_settings->unlimited_biolinks_limit ?></div>
-                            </li>
-                        <?php else: ?>
-                            <li>
-                                <div><?= sprintf(language()->global->plan_settings->biolinks_limit, settings()->plan_free->settings->biolinks_limit) ?></div>
-                            </li>
-                        <?php endif ?>
-
-                        <?php if(settings()->links->shortener_is_enabled): ?>
-                            <?php if(settings()->plan_free->settings->links_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_links_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->links_limit, settings()->plan_free->settings->links_limit) ?></div>
-                                </li>
-                            <?php endif ?>
-                        <?php endif ?>
-
-                        <?php $enabled_biolink_blocks = array_filter((array) settings()->plan_free->settings->enabled_biolink_blocks) ?>
-                        <?php $enabled_biolink_blocks_count = count($enabled_biolink_blocks) ?>
-                        <?php
-                        $enabled_biolink_blocks_string = implode(', ', array_map(function($key) {
-                            return language()->link->biolink->{mb_strtolower($key)}->name;
-                        }, array_keys($enabled_biolink_blocks)));
-                        ?>
-                        <li>
-                            <div class="<?= $enabled_biolink_blocks_count ? null : 'text-muted' ?>">
-                                <span data-toggle="tooltip" title="<?= $enabled_biolink_blocks_string ?>">
-                                <?php if($enabled_biolink_blocks_count == count(require APP_PATH . 'includes/biolink_blocks.php')): ?>
-                                    <?= language()->global->plan_settings->enabled_biolink_blocks_all ?>
-                                <?php else: ?>
-                                    <?= sprintf(language()->global->plan_settings->enabled_biolink_blocks_x, '<strong>' . nr($enabled_biolink_blocks_count) . '</strong>') ?>
-                                <?php endif ?>
-                                </span>
-                            </div>
-                        </li>
-
-                        <?php if(settings()->links->domains_is_enabled): ?>
-                            <?php if(settings()->plan_free->settings->domains_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_domains_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->domains_limit, settings()->plan_free->settings->domains_limit) ?></div>
-                                </li>
-                            <?php endif ?>
-                        <?php endif ?>
-
-                        <?php foreach($data->simple_user_plan_settings as $plan_setting): ?>
-                            <li>
-                                <div class="<?= settings()->plan_free->settings->{$plan_setting} ? null : 'text-muted' ?>">
-                                    <span data-toggle="tooltip" title="<?= language()->global->plan_settings->{$plan_setting . '_help'} ?>"><?= language()->global->plan_settings->{$plan_setting} ?></span>
-                                </div>
-
-                                <i class="fa fa-fw fa-sm <?= settings()->plan_free->settings->{$plan_setting} ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
-                            </li>
-                        <?php endforeach ?>
-                    </ul>
-
-                    <?php if(Authentication::check() && $this->user->plan_id == 'free'): ?>
-                        <button class="btn btn-lg btn-block btn-secondary pricing-button"><?= language()->plan->button->already_free ?></button>
-                    <?php else: ?>
-                        <a href="<?= Authentication::check() ? url('pay/free') : url('register?redirect=pay/free') ?>" class="btn btn-lg btn-block btn-primary pricing-button"><?= language()->plan->button->choose ?></a>
-                    <?php endif ?>
+                        <a href="<?= url('register?redirect=pay/free') ?>" class="btn btn-lg btn-block btn-primary <?= \Altum\Middlewares\Authentication::check() && $this->user->plan_id != 'free' ? 'disabled' : null ?>"><?= language()->plan->button->choose ?></a>
+                    </div>
                 </div>
             </div>
 
@@ -167,125 +76,17 @@ use Altum\Middlewares\Authentication;
 
         <?php if(settings()->payment->is_enabled): ?>
 
-            <?php if(settings()->plan_trial->status == 1): ?>
-
-                <div class="pricing-plan">
-                    <div class="pricing-header">
-                        <span class="pricing-name"><?= settings()->plan_trial->name ?></span>
-
-                        <div class="pricing-price">
-                            <span class="pricing-price-amount"><?= language()->plan->trial->price ?></span>
-                        </div>
-
-                        <div class="pricing-details">&nbsp;</div>
-                    </div>
-
-                    <div class="pricing-body">
-                        <ul class="pricing-features">
-                            <?php if(settings()->plan_trial->settings->projects_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_projects_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->projects_limit, settings()->plan_trial->settings->projects_limit) ?></div>
-                                </li>
-                            <?php endif ?>
-
-                            <?php if(settings()->plan_trial->settings->pixels_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_pixels_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->pixels_limit, settings()->plan_trial->settings->pixels_limit) ?></div>
-                                </li>
-                            <?php endif ?>
-
-                            <?php if(settings()->plan_trial->settings->biolinks_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_biolinks_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->biolinks_limit, settings()->plan_trial->settings->biolinks_limit) ?></div>
-                                </li>
-                            <?php endif ?>
-
-                            <?php if(settings()->links->shortener_is_enabled): ?>
-                                <?php if(settings()->plan_trial->settings->links_limit == -1): ?>
-                                    <li>
-                                        <div><?= language()->global->plan_settings->unlimited_links_limit ?></div>
-                                    </li>
-                                <?php else: ?>
-                                    <li>
-                                        <div><?= sprintf(language()->global->plan_settings->links_limit, settings()->plan_trial->settings->links_limit) ?></div>
-                                    </li>
-                                <?php endif ?>
-                            <?php endif ?>
-
-                            <?php $enabled_biolink_blocks = array_filter((array) settings()->plan_trial->settings->enabled_biolink_blocks) ?>
-                            <?php $enabled_biolink_blocks_count = count($enabled_biolink_blocks) ?>
-                            <?php
-                            $enabled_biolink_blocks_string = implode(', ', array_map(function($key) {
-                                return language()->link->biolink->{mb_strtolower($key)}->name;
-                            }, array_keys($enabled_biolink_blocks)));
-                            ?>
-                            <li>
-                                <div class="<?= $enabled_biolink_blocks_count ? null : 'text-muted' ?>">
-                                <span data-toggle="tooltip" title="<?= $enabled_biolink_blocks_string ?>">
-                                <?php if($enabled_biolink_blocks_count == count(require APP_PATH . 'includes/biolink_blocks.php')): ?>
-                                    <?= language()->global->plan_settings->enabled_biolink_blocks_all ?>
-                                <?php else: ?>
-                                    <?= sprintf(language()->global->plan_settings->enabled_biolink_blocks_x, '<strong>' . nr($enabled_biolink_blocks_count) . '</strong>') ?>
-                                <?php endif ?>
-                                </span>
-                                </div>
-                            </li>
-
-                            <?php if(settings()->links->domains_is_enabled): ?>
-                                <?php if(settings()->plan_trial->settings->domains_limit == -1): ?>
-                                    <li>
-                                        <div><?= language()->global->plan_settings->unlimited_domains_limit ?></div>
-                                    </li>
-                                <?php else: ?>
-                                    <li>
-                                        <div><?= sprintf(language()->global->plan_settings->domains_limit, settings()->plan_trial->settings->domains_limit) ?></div>
-                                    </li>
-                                <?php endif ?>
-                            <?php endif ?>
-
-                            <?php foreach($data->simple_user_plan_settings as $plan_setting): ?>
-                                <li>
-                                    <div class="<?= settings()->plan_trial->settings->{$plan_setting} ? null : 'text-muted' ?>">
-                                                        <span data-toggle="tooltip" title="<?= language()->global->plan_settings->{$plan_setting . '_help'} ?>"><?= language()->global->plan_settings->{$plan_setting} ?></span>
-                                    </div>
-
-                                    <i class="fa fa-fw fa-sm <?= settings()->plan_trial->settings->{$plan_setting} ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
-                                </li>
-                            <?php endforeach ?>
-                        </ul>
-
-                        <?php if(Authentication::check() && $this->user->plan_trial_done): ?>
-                            <button class="btn btn-lg btn-block btn-secondary pricing-button"><?= language()->plan->button->disabled ?></button>
-                        <?php else: ?>
-                            <a href="<?= Authentication::check() ? url('pay/trial') : url('register?redirect=pay/trial') ?>" class="btn btn-lg btn-block btn-primary pricing-button"><?= language()->plan->button->choose ?></a>
-                        <?php endif ?>
-                    </div>
-                </div>
-
-            <?php endif ?>
-
             <?php foreach($plans as $plan): ?>
 
-                <?php $plan->settings = json_decode($plan->settings) ?>
+            <?php $plan->settings = json_decode($plan->settings) ?>
 
-                <div
-                    class="pricing-plan"
+            <div
+                    class="col-12 col-md-6 col-lg-4 p-3"
                     data-plan-monthly="<?= json_encode((bool) $plan->monthly_price) ?>"
                     data-plan-annual="<?= json_encode((bool) $plan->annual_price) ?>"
                     data-plan-lifetime="<?= json_encode((bool) $plan->lifetime_price) ?>"
-                >
+            >
+                <div class="pricing-plan rounded" style="<?= $plan->color ? 'border-color: ' . $plan->color : null ?>">
                     <div class="pricing-header">
                         <span class="pricing-name"><?= $plan->name ?></span>
 
@@ -296,106 +97,36 @@ use Altum\Middlewares\Authentication;
                             <span class="pricing-price-currency"><?= settings()->payment->currency ?></span>
                         </div>
 
-                        <div class="pricing-details">
-                            <span class="d-none" data-plan-payment-frequency="monthly"><?= language()->plan->custom_plan->monthly_payments ?></span>
-                            <span class="d-none" data-plan-payment-frequency="annual"><?= language()->plan->custom_plan->annual_payments ?></span>
-                            <span class="d-none" data-plan-payment-frequency="lifetime"><?= language()->plan->custom_plan->lifetime_payments ?></span>
-                        </div>
+                        <div class="pricing-details"><?= $plan->description ?></div>
                     </div>
 
-                    <div class="pricing-body">
-                        <ul class="pricing-features">
-                            <?php if($plan->settings->projects_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_projects_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->projects_limit, $plan->settings->projects_limit) ?></div>
-                                </li>
-                            <?php endif ?>
+                    <div class="pricing-body d-flex flex-column justify-content-between">
+                        <?= include_view(THEME_PATH . 'views/partials/plans_plan_content.php', ['plan_settings' => $plan->settings]) ?>
 
-                            <?php if($plan->settings->pixels_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_pixels_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->pixels_limit, $plan->settings->pixels_limit) ?></div>
-                                </li>
-                            <?php endif ?>
-
-                            <?php if($plan->settings->biolinks_limit == -1): ?>
-                                <li>
-                                    <div><?= language()->global->plan_settings->unlimited_biolinks_limit ?></div>
-                                </li>
-                            <?php else: ?>
-                                <li>
-                                    <div><?= sprintf(language()->global->plan_settings->biolinks_limit, $plan->settings->biolinks_limit) ?></div>
-                                </li>
-                            <?php endif ?>
-
-                            <?php if(settings()->links->shortener_is_enabled): ?>
-                                <?php if($plan->settings->links_limit == -1): ?>
-                                    <li>
-                                        <div><?= language()->global->plan_settings->unlimited_links_limit ?></div>
-                                    </li>
+                        <a href="<?= url('register?redirect=pay/' . $plan->plan_id) ?>" class="btn btn-lg btn-block btn-primary">
+                            <?php if(\Altum\Middlewares\Authentication::check()): ?>
+                                <?php if(!$this->user->plan_trial_done && $plan->trial_days): ?>
+                                    <?= sprintf(language()->plan->button->trial, $plan->trial_days) ?>
+                                <?php elseif($this->user->plan_id == $plan->plan_id): ?>
+                                    <?= language()->plan->button->renew ?>
                                 <?php else: ?>
-                                    <li>
-                                        <div><?= sprintf(language()->global->plan_settings->links_limit, $plan->settings->links_limit) ?></div>
-                                    </li>
+                                    <?= language()->plan->button->choose ?>
+                                <?php endif ?>
+                            <?php else: ?>
+                                <?php if($plan->trial_days): ?>
+                                    <?= sprintf(language()->plan->button->trial, $plan->trial_days) ?>
+                                <?php else: ?>
+                                    <?= language()->plan->button->choose ?>
                                 <?php endif ?>
                             <?php endif ?>
-
-                            <?php $enabled_biolink_blocks = array_filter((array) $plan->settings->enabled_biolink_blocks) ?>
-                            <?php $enabled_biolink_blocks_count = count($enabled_biolink_blocks) ?>
-                            <?php
-                            $enabled_biolink_blocks_string = implode(', ', array_map(function($key) {
-                                return language()->link->biolink->{mb_strtolower($key)}->name;
-                            }, array_keys($enabled_biolink_blocks)));
-                            ?>
-                            <li>
-                                <div class="<?= $enabled_biolink_blocks_count ? null : 'text-muted' ?>">
-                                <span data-toggle="tooltip" title="<?= $enabled_biolink_blocks_string ?>">
-                                <?php if($enabled_biolink_blocks_count == count(require APP_PATH . 'includes/biolink_blocks.php')): ?>
-                                    <?= language()->global->plan_settings->enabled_biolink_blocks_all ?>
-                                <?php else: ?>
-                                    <?= sprintf(language()->global->plan_settings->enabled_biolink_blocks_x, '<strong>' . nr($enabled_biolink_blocks_count) . '</strong>') ?>
-                                <?php endif ?>
-                                </span>
-                                </div>
-                            </li>
-
-                            <?php if(settings()->links->domains_is_enabled): ?>
-                                <?php if($plan->settings->domains_limit == -1): ?>
-                                    <li>
-                                        <div><?= language()->global->plan_settings->unlimited_domains_limit ?></div>
-                                    </li>
-                                <?php else: ?>
-                                    <li>
-                                        <div><?= sprintf(language()->global->plan_settings->domains_limit, $plan->settings->domains_limit) ?></div>
-                                    </li>
-                                <?php endif ?>
-                            <?php endif ?>
-
-                            <?php foreach($data->simple_user_plan_settings as $plan_setting): ?>
-                                <li>
-                                    <div class="<?= $plan->settings->{$plan_setting} ? null : 'text-muted' ?>">
-                                        <span data-toggle="tooltip" title="<?= language()->global->plan_settings->{$plan_setting . '_help'} ?>"><?= language()->global->plan_settings->{$plan_setting} ?></span>
-                                    </div>
-
-                                    <i class="fa fa-fw fa-sm <?= $plan->settings->{$plan_setting} ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
-                                </li>
-                            <?php endforeach ?>
-                        </ul>
-
-                        <a href="<?= Authentication::check() ? url('pay/' . $plan->plan_id) : url('register?redirect=pay/' . $plan->plan_id) ?>" class="btn btn-lg btn-block btn-primary pricing-button"><?= language()->plan->button->choose ?></a>
+                        </a>
                     </div>
                 </div>
+            </div>
 
-            <?php endforeach ?>
+        <?php endforeach ?>
 
-            <?php ob_start() ?>
+        <?php ob_start() ?>
             <script>
                 'use strict';
 
@@ -440,7 +171,31 @@ use Altum\Middlewares\Authentication;
 
                 payment_frequency_handler();
             </script>
-            <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>
+        <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>
+
+        <?php if(settings()->plan_custom->status == 1): ?>
+
+            <div class="col-12 col-md-6 col-lg-4 p-3">
+                <div class="pricing-plan rounded" style="<?= settings()->plan_custom->color ? 'border-color: ' . settings()->plan_custom->color : null ?>">
+                    <div class="pricing-header">
+                        <span class="pricing-name"><?= settings()->plan_custom->name ?></span>
+
+                        <div class="pricing-price">
+                            <span class="pricing-price-amount"><?= settings()->plan_custom->price ?></span>
+                        </div>
+
+                        <div class="pricing-details"><?= settings()->plan_custom->description ?></div>
+                    </div>
+
+                    <div class="pricing-body d-flex flex-column justify-content-between">
+                        <?= include_view(THEME_PATH . 'views/partials/plans_plan_content.php', ['plan_settings' => settings()->plan_custom->settings]) ?>
+
+                        <a href="<?= settings()->plan_custom->custom_button_url ?>" class="btn btn-lg btn-block btn-primary"><?= language()->plan->button->contact ?></a>
+                    </div>
+                </div>
+            </div>
+
+        <?php endif ?>
 
         <?php endif ?>
 

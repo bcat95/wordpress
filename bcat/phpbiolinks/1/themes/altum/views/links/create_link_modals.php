@@ -31,7 +31,7 @@
                                 <?php if(count($data->domains)): ?>
                                     <select name="domain_id" class="appearance-none select-custom-altum form-control input-group-text">
                                         <?php if(settings()->links->main_domain_is_enabled || \Altum\Middlewares\Authentication::is_admin()): ?>
-                                            <option value=""><?= url() ?></option>
+                                            <option value=""><?= SITE_URL ?></option>
                                         <?php endif ?>
 
                                         <?php foreach($data->domains as $row): ?>
@@ -39,7 +39,7 @@
                                         <?php endforeach ?>
                                     </select>
                                 <?php else: ?>
-                                    <span class="input-group-text"><?= url() ?></span>
+                                    <span class="input-group-text"><?= SITE_URL ?></span>
                                 <?php endif ?>
                             </div>
                             <input
@@ -90,7 +90,7 @@
                                 <?php if(count($data->domains)): ?>
                                     <select name="domain_id" class="appearance-none select-custom-altum form-control input-group-text">
                                         <?php if(settings()->links->main_domain_is_enabled || \Altum\Middlewares\Authentication::is_admin()): ?>
-                                            <option value=""><?= url() ?></option>
+                                            <option value=""><?= SITE_URL ?></option>
                                         <?php endif ?>
 
                                         <?php foreach($data->domains as $row): ?>
@@ -98,7 +98,7 @@
                                         <?php endforeach ?>
                                     </select>
                                 <?php else: ?>
-                                    <span class="input-group-text"><?= url() ?></span>
+                                    <span class="input-group-text"><?= SITE_URL ?></span>
                                 <?php endif ?>
                             </div>
                             <input

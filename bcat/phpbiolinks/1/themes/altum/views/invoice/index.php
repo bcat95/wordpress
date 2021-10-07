@@ -14,7 +14,7 @@
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                     <div class="mb-3 mb-md-0">
                         <?php if(settings()->logo != ''): ?>
-                            <img src="<?= SITE_URL . UPLOADS_URL_PATH . 'logo/' . settings()->logo ?>" class="img-fluid navbar-logo invoice-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
+                            <img src="<?= UPLOADS_FULL_URL . 'logo/' . settings()->logo ?>" class="img-fluid navbar-logo invoice-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
                         <?php else: ?>
                             <h1><?= settings()->title ?></h1>
                         <?php endif ?>
@@ -250,18 +250,14 @@
                         <?php if(!empty($data->payment_taxes)): ?>
                             <?php foreach($data->payment_taxes as $row): ?>
 
-                                <?php
-
-                                $data->payment->discount_amount;
-
-                                ?>
-
-
                                 <tr>
                                     <td>
                                         <div class="d-flex flex-column">
                                             <span><?= $row->name ?></span>
-                                            <span class="text-muted"><?= $row->description ?></span>
+                                            <div>
+                                                <span class="text-muted"><?= language()->pay->custom_plan->summary->{$row->type == 'inclusive' ? 'tax_inclusive' : 'tax_exclusive'} ?>.</span>
+                                                <span class="text-muted"><?= $row->description ?></span>
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="text-right">

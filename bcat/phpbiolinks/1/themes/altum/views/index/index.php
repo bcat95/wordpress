@@ -3,30 +3,21 @@
 <div class="index-container">
     <div class="container">
         <?= \Altum\Alerts::output_alerts() ?>
+
         <div class="row">
             <div class="col">
                 <div class="text-left">
                     <h1 class="index-header mb-4"><?= language()->index->header ?></h1>
                     <p class="index-subheader text-gray-700 mb-5"><?= language()->index->subheader ?></p>
-                    <div class="row">
-                        <div class="col pr-2">
-                            <a href="<?= url('login') ?>" class="w-100 btn btn-primary index-button">
-                                <i class="fa fa-sign-in-alt" aria-hidden="true"></i>
-                                <?= language()->login->menu ?>
-                            </a>
-                        </div>
-                        <div class="col pl-2">
-                            <a href="<?= url('register') ?>" class="w-100 btn btn-primary index-button">
-                                <i class="fa fa-bolt" aria-hidden="true"></i>
-                                <?= language()->index->sign_up ?>
-                            </a>
-                        </div>
+
+                    <div>
+                        <a href="<?= url('register') ?>" class="btn btn-primary index-button"><?= language()->index->sign_up ?></a>
                     </div>
                 </div>
             </div>
 
             <div class="d-none d-lg-block col">
-                <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/hero.png' ?>" class="index-image" width="655" height="655"/>
+                <img src="<?= ASSETS_FULL_URL . 'images/hero.png' ?>" class="index-image" />
             </div>
         </div>
     </div>
@@ -35,7 +26,7 @@
 <div class="container mt-10">
     <div class="row">
         <div class="col-md-6">
-            <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="<?= url(THEME_URL_PATH . 'assets/images/presentation-1.png') ?>" class="img-fluid lazyload shadow" width="540" height="350" />
+            <img src="<?= ASSETS_FULL_URL . 'images/presentation-1.png' ?>" class="img-fluid shadow" loading="lazy" />
         </div>
 
         <div class="col-md-6 d-flex align-items-center">
@@ -69,7 +60,7 @@
         </div>
 
         <div class="col-md-6">
-            <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="<?= url(THEME_URL_PATH . 'assets/images/presentation-2.png') ?>" class="img-fluid lazyload shadow" width="540" height="350" />
+            <img src="<?= ASSETS_FULL_URL . 'images/presentation-2.png' ?>" class="img-fluid shadow" loading="lazy" />
         </div>
     </div>
 </div>
@@ -77,7 +68,7 @@
 <div class="container mt-10">
     <div class="row">
         <div class="col-md-6">
-            <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="<?= url(THEME_URL_PATH . 'assets/images/presentation-3.png') ?>" class="img-fluid lazyload shadow" width="540" height="350" />
+            <img src="<?= ASSETS_FULL_URL . 'images/presentation-3.png' ?>" class="img-fluid shadow" loading="lazy" />
         </div>
 
         <div class="col-md-6 d-flex align-items-center">
@@ -111,18 +102,11 @@
         </div>
 
         <div class="col-md-6">
-            <img src="data:image/png;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" data-src="<?= url(THEME_URL_PATH . 'assets/images/presentation-4.png') ?>" class="img-fluid lazyload shadow" width="540" height="350" />
+            <img src="<?= ASSETS_FULL_URL . 'images/presentation-4.png' ?>" class="img-fluid shadow" loading="lazy" />
         </div>
     </div>
 </div>
 
-<div class="container mt-10">
-    <div class="row">
-        <div class="col-md-10 align-items-center mx-auto">
-            <?php include 'content_1.php';?>
-        </div>
-    </div>
-</div>
 <div class="container mt-10">
     <div class="text-center mb-8">
         <h2><?= language()->index->pricing->header ?></h2>

@@ -2,7 +2,7 @@
 
 <div class="mb-4">
     <div class="d-flex align-items-center">
-        <h1 class="h3 mr-3"><i class="fa fa-fw fa-xs fa-globe text-primary-900 mr-2"></i> <?= language()->admin_domain_update->header ?></h1>
+        <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-globe text-primary-900 mr-2"></i> <?= language()->admin_domain_update->header ?></h1>
 
         <?= include_view(THEME_PATH . 'views/admin/domains/admin_domain_dropdown_button.php', ['id' => $data->domain->domain_id]) ?>
     </div>
@@ -78,3 +78,5 @@
 
     </div>
 </div>
+
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/domains/domain_delete_modal.php'), 'modals'); ?>

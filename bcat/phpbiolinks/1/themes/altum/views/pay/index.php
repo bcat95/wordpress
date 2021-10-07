@@ -26,12 +26,13 @@
             <ol class="custom-breadcrumbs">
                 <li><a href="<?= url() ?>"><?= language()->index->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
                 <li><a href="<?= url('plan') ?>"><?= language()->plan->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
+                <li><a href="<?= url('pay-billing/' . $data->plan_id) ?>"><?= language()->pay_billing->breadcrumb ?></a> <i class="fa fa-fw fa-angle-right"></i></li>
                 <li class="active" aria-current="page"><?= sprintf(language()->pay->breadcrumb, $data->plan->name) ?></li>
             </ol>
         </small>
     </nav>
 
-    <?php if($data->plan_id == 'trial'): ?>
+    <?php if($data->plan->trial_days && !$this->user->plan_trial_done): ?>
         <h1 class="h3"><?= sprintf(language()->pay->trial->header, $data->plan->name) ?></h1>
         <div class="text-muted mb-5"><?= language()->pay->trial->subheader ?></div>
 
@@ -40,16 +41,7 @@
 
             <div class="row">
                 <div class="col-12 col-xl-8 order-1 order-xl-0">
-
-                    <?php if($this->user->plan_id != 'free' && !$this->user->plan_is_expired): ?>
-                        <div class="alert alert-info" role="alert">
-                            <?= language()->pay->trial->other_plan_not_expired ?>
-                        </div>
-                    <?php endif ?>
-
-                    <div class="mt-4">
-                        <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary"><?= sprintf(language()->pay->trial->trial_start, $data->plan->days) ?></button>
-                    </div>
+                    <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary"><?= sprintf(language()->pay->trial->trial_start, $data->plan->trial_days) ?></button>
 
                     <div class="mt-3 text-muted text-center">
                         <small>
@@ -74,14 +66,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12 col-xl-8">
-
-
-
-                </div>
-            </div>
-
+            <div class="row"><div class="col-12 col-xl-8"></div></div>
         </form>
 
 
@@ -182,7 +167,7 @@
 
                     <h2 class="h5 mt-5 mb-4 text-muted"><i class="fa fa-fw fa-sm fa-money-check-alt mr-1"></i> <?= language()->pay->custom_plan->payment_processor ?></h2>
 
-                    <?php if(!settings()->paypal->is_enabled && !settings()->stripe->is_enabled && !settings()->offline_payment->is_enabled): ?>
+                    <?php if(!settings()->paypal->is_enabled && !settings()->stripe->is_enabled && !settings()->offline_payment->is_enabled && !settings()->coinbase->is_enabled): ?>
                         <div class="alert alert-info" role="alert">
                             <?= language()->pay->custom_plan->no_processor ?>
                         </div>
@@ -250,12 +235,32 @@
 
                                     </label>
                                 <?php endif ?>
+
+                                <?php if(settings()->coinbase->is_enabled): ?>
+                                    <label class="col-12 my-2 custom-radio-box">
+
+                                        <input type="radio" name="payment_processor" value="coinbase" class="custom-control-input" required="required">
+
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between">
+
+                                                <div class="card-title mb-0"><?= language()->pay->custom_plan->coinbase ?></div>
+
+                                                <div class="">
+                                                    <span class="custom-radio-box-main-icon"><i class="fab fa-fw fa-bitcoin"></i></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </label>
+                                <?php endif ?>
                             </div>
 
                             <div id="offline_payment_processor_wrapper" style="display: none;">
                                 <div class="form-group mt-4">
                                     <label><?= language()->pay->custom_plan->offline_payment_instructions ?></label>
-                                    <div class="card"><div class="card-body"><?= settings()->offline_payment->instructions ?></div></div>
+                                    <div class="card"><div class="card-body"><?= nl2br(settings()->offline_payment->instructions) ?></div></div>
                                 </div>
 
                                 <div class="form-group mt-4">
@@ -418,6 +423,10 @@
                                         <span id="summary_payment_processor_offline_payment" style="display: none;">
                                             <?= language()->pay->custom_plan->offline_payment ?>
                                         </span>
+
+                                        <span id="summary_payment_processor_coinbase" style="display: none;">
+                                            <?= language()->pay->custom_plan->coinbase ?>
+                                        </span>
                                     </div>
 
                                     <div class="d-flex justify-content-between mb-3">
@@ -495,7 +504,7 @@
                                         </div>
                                     </div>
 
-                                    <?php ob_start() ?>
+                                <?php ob_start() ?>
                                     <script>
                                         'use strict';
 
@@ -613,112 +622,6 @@
             <div class="row">
                 <div class="col-12">
 
-                    <?php if(settings()->payment->taxes_and_billing_is_enabled && (empty($this->user->billing->name) || empty($this->user->billing->address) || empty($this->user->billing->city) || empty($this->user->billing->county) || empty($this->user->billing->zip))): ?>
-                        <div class="mt-5" id="billing" style="<?= !settings()->payment->is_enabled || !settings()->payment->taxes_and_billing_is_enabled ? 'display: none;' : null ?>">
-                            <h1 class="h4"><?= language()->account->billing->header ?></h1>
-
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->type ?></label>
-                                        <select name="billing_type" class="form-control">
-                                            <option value="personal" <?= $this->user->billing->type == 'personal' ? 'selected="selected"' : null ?>><?= language()->account->billing->type_personal ?></option>
-                                            <option value="business" <?= $this->user->billing->type == 'business' ? 'selected="selected"' : null ?>><?= language()->account->billing->type_business ?></option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->name ?></label>
-                                        <input type="text" name="billing_name" class="form-control" value="<?= $this->user->billing->name ?>" required="required" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->address ?></label>
-                                        <input type="text" name="billing_address" class="form-control" value="<?= $this->user->billing->address ?>" required="required" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-lg-6">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->city ?></label>
-                                        <input type="text" name="billing_city" class="form-control" value="<?= $this->user->billing->city ?>" required="required" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-lg-4">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->county ?></label>
-                                        <input type="text" name="billing_county" class="form-control" value="<?= $this->user->billing->county ?>" required="required" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-lg-2">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->zip ?></label>
-                                        <input type="text" name="billing_zip" class="form-control" value="<?= $this->user->billing->zip ?>" required="required" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->country ?></label>
-                                        <select name="billing_country" class="form-control">
-                                            <?php foreach(get_countries_array() as $key => $value): ?>
-                                                <option value="<?= $key ?>" <?= $this->user->billing->country == $key ? 'selected="selected"' : null ?>><?= $value ?></option>
-                                            <?php endforeach ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label><?= language()->account->billing->phone ?></label>
-                                        <input type="text" name="billing_phone" class="form-control" value="<?= $this->user->billing->phone ?>" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12" id="billing_tax_id_container">
-                                    <div class="form-group">
-                                        <label><?= !empty(settings()->business->tax_type) ? settings()->business->tax_type : language()->account->billing->tax_id ?></label>
-                                        <input type="text" name="billing_tax_id" class="form-control" value="<?= $this->user->billing->tax_id ?>" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    <?php ob_start() ?>
-                        <script>
-                            'use strict';
-
-                            /* Billing type handler */
-                            let billing_type = () => {
-                                let type = document.querySelector('select[name="billing_type"]').value;
-
-                                if(type == 'personal') {
-                                    document.querySelector('#billing_tax_id_container').style.display = 'none';
-                                } else {
-                                    document.querySelector('#billing_tax_id_container').style.display = '';
-                                }
-                            };
-
-                            billing_type();
-
-                            document.querySelector('select[name="billing_type"]').addEventListener('change', billing_type);
-
-                            <?php if(!empty($this->user->payment_subscription_id)): ?>
-                            document.querySelectorAll('[name^="billing_"]').forEach(element => {
-                                element.setAttribute('disabled', 'disabled');
-                            });
-                            <?php endif ?>
-
-                        </script>
-                        <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>
-                    <?php endif ?>
-
                     <div class="mt-5">
                         <button type="submit" name="submit" class="btn btn-lg btn-block btn-primary"><?= language()->pay->custom_plan->pay ?></button>
                     </div>
@@ -757,9 +660,7 @@
     <?php endif ?>
 
     <?php endif ?>
-
 </div>
-
 
 
 <?php ob_start() ?>
@@ -848,6 +749,7 @@
                 $('#summary_payment_processor_stripe').hide();
                 $('#summary_payment_processor_offline_payment').hide();
                 $('#offline_payment_processor_wrapper').hide();
+                $('#summary_payment_processor_coinbase').hide();
 
                 break;
 
@@ -857,6 +759,7 @@
                 $('#summary_payment_processor_stripe').show();
                 $('#summary_payment_processor_offline_payment').hide();
                 $('#offline_payment_processor_wrapper').hide();
+                $('#summary_payment_processor_coinbase').hide();
 
                 break;
 
@@ -866,8 +769,23 @@
                 $('#summary_payment_processor_stripe').hide();
                 $('#summary_payment_processor_offline_payment').show();
                 $('#offline_payment_processor_wrapper').show();
+                $('#summary_payment_processor_coinbase').hide();
 
-                /* Show only the one time payment option for the lifetime plan */
+                /* Show only the one time payment option */
+                $('#recurring_type_label').hide();
+                $('#one_time_type_label').show();
+
+                break;
+
+            case 'coinbase':
+
+                $('#summary_payment_processor_paypal').hide();
+                $('#summary_payment_processor_stripe').hide();
+                $('#summary_payment_processor_offline_payment').hide();
+                $('#offline_payment_processor_wrapper').hide();
+                $('#summary_payment_processor_coinbase').show();
+
+                /* Show only the one time payment option */
                 $('#recurring_type_label').hide();
                 $('#one_time_type_label').show();
 
@@ -912,7 +830,6 @@
         let payment_frequency = $('[name="payment_frequency"]:checked').val();
 
         let full_price = 0;
-        let inclusive_taxes = 0;
         let exclusive_taxes = 0;
         let price_without_inclusive_taxes = 0;
         let price_with_taxes = 0;
@@ -962,33 +879,35 @@
         if(altum.taxes) {
 
             /* Check for the inclusives */
-            let inclusive_taxes_array = [];
+            let inclusive_taxes_total_percentage = 0;
 
             for(let row of altum.taxes) {
-                if(row.type == 'exclusive') {
-                    continue;
-                }
+                if(row.type == 'exclusive') continue;
 
-                let inclusive_tax = parseFloat((price - (price / (1 + parseInt(row.value) / 100))).toFixed(2));
+                inclusive_taxes_total_percentage += parseInt(row.value);
+            }
 
-                inclusive_taxes_array.push(inclusive_tax);
+            let total_inclusive_tax = parseFloat((price - (price / (1 + inclusive_taxes_total_percentage / 100))).toFixed(2));
+
+            for(let row of altum.taxes) {
+                if(row.type == 'exclusive') continue;
+
+                let percentage_of_total_inclusive_tax = parseInt(row.value) * 100 / inclusive_taxes_total_percentage;
+
+                let inclusive_tax = parseFloat(total_inclusive_tax * percentage_of_total_inclusive_tax / 100).toFixed(2)
 
                 /* Display the value of the tax */
                 $(`#summary_tax_id_${row.tax_id} .tax-value`).html(nr(inclusive_tax, 2));
 
             }
 
-            inclusive_taxes = inclusive_taxes_array.reduce((total, number) => total + number, 0);
-
-            price_without_inclusive_taxes = price - inclusive_taxes;
+            price_without_inclusive_taxes = price - total_inclusive_tax;
 
             /* Check for the exclusives */
             let exclusive_taxes_array = [];
 
             for(let row of altum.taxes) {
-                if(row.type == 'inclusive') {
-                    continue;
-                }
+                if(row.type == 'inclusive') continue;
 
                 let exclusive_tax = parseFloat((row.value_type == 'percentage' ? price_without_inclusive_taxes * (parseInt(row.value) / 100) : parseFloat(row.value)).toFixed(2));
 

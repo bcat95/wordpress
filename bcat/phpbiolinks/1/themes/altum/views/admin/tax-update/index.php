@@ -2,7 +2,7 @@
 
 <div class="d-flex justify-content-between mb-4">
     <div class="d-flex align-items-center">
-        <h1 class="h3 mr-3"><i class="fa fa-fw fa-xs fa-receipt text-primary-900 mr-2"></i> <?= language()->admin_tax_update->header ?></h1>
+        <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-receipt text-primary-900 mr-2"></i> <?= language()->admin_tax_update->header ?></h1>
 
         <?= include_view(THEME_PATH . 'views/admin/taxes/admin_tax_dropdown_button.php', ['id' => $data->tax->tax_id]) ?>
     </div>
@@ -83,34 +83,4 @@
 
     </div>
 </div>
-
-<?php ob_start() ?>
-<script>
-    'use strict';
-
-    let checker = () => {
-        let value_type = document.querySelector('select[name="value_type"]').value;
-
-        switch(value_type) {
-            case 'percentage':
-
-                document.querySelector('select[name="type"] option[value="inclusive"]').removeAttribute('disabled');
-                document.querySelector('select[name="type"] option[value="exclusive"]').removeAttribute('selected');
-
-                break;
-
-            case 'fixed':
-
-                document.querySelector('select[name="type"] option[value="inclusive"]').setAttribute('disabled', 'disabled');
-                document.querySelector('select[name="type"] option[value="exclusive"]').setAttribute('selected', 'selected');
-
-                break;
-        }
-    };
-
-    checker();
-
-    document.querySelector('select[name="value_type"]').addEventListener('change', checker);
-</script>
-<?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>
 

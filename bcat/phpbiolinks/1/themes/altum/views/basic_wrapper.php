@@ -1,12 +1,12 @@
 <?php defined('ALTUMCODE') || die() ?>
 <!DOCTYPE html>
-<html lang="<?= language()->language_code ?>">
+<html lang="<?= \Altum\Language::$language_code ?>" dir="<?= language()->direction ?>">
     <head>
         <title><?= \Altum\Title::get() ?></title>
         <base href="<?= SITE_URL; ?>">
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta http-equiv="content-language" content="<?= language()->language_code ?>" />
+        <meta http-equiv="content-language" content="<?= \Altum\Language::$language_code  ?>" />
 
         <?php if(\Altum\Meta::$description): ?>
             <meta name="description" content="<?= \Altum\Meta::$description ?>" />
@@ -15,18 +15,29 @@
             <meta name="keywords" content="<?= \Altum\Meta::$keywords ?>" />
         <?php endif ?>
 
+        <?php if(!settings()->main->se_indexing): ?>
+            <meta name="robots" content="noindex">
+        <?php endif ?>
+
+        <link rel="alternate" href="<?= SITE_URL . \Altum\Routing\Router::$original_request ?>" hreflang="x-default" />
+        <?php if(count(\Altum\Language::$languages) > 1): ?>
+            <?php foreach(\Altum\Language::$languages as $language_code => $language_name): ?>
+                <?php if(settings()->default_language != $language_name): ?>
+                    <link rel="alternate" href="<?= SITE_URL . $language_code . '/' . \Altum\Routing\Router::$original_request ?>" hreflang="<?= $language_code ?>" />
+                <?php endif ?>
+            <?php endforeach ?>
+        <?php endif ?>
+
         <?php if(!empty(settings()->favicon)): ?>
-            <link href="<?= SITE_URL . UPLOADS_URL_PATH . 'favicon/' . settings()->favicon ?>" rel="shortcut icon" />
+            <link href="<?= UPLOADS_FULL_URL . 'favicon/' . settings()->favicon ?>" rel="shortcut icon" />
         <?php endif ?>
 
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
-        <link href="<?= SITE_URL . ASSETS_URL_PATH . 'css/' . \Altum\ThemeStyle::get_file() . '?v=' . PRODUCT_CODE ?>" id="css_theme_style" rel="stylesheet" media="screen,print">
+        <link href="<?= ASSETS_FULL_URL . 'css/' . \Altum\ThemeStyle::get_file() . '?v=' . PRODUCT_CODE ?>" id="css_theme_style" rel="stylesheet" media="screen,print">
         <?php foreach(['custom.css', 'link-custom.css', 'animate.min.css'] as $file): ?>
-            <link href="<?= SITE_URL . ASSETS_URL_PATH . 'css/' . $file . '?v=' . PRODUCT_CODE ?>" rel="stylesheet" media="screen">
+            <link href="<?= ASSETS_FULL_URL . 'css/' . $file . '?v=' . PRODUCT_CODE ?>" rel="stylesheet" media="screen">
         <?php endforeach ?>
-
-        <style type="text/css"><?php include $_SERVER['DOCUMENT_ROOT'].'/assets/style.css';?></style>
 
         <?= \Altum\Event::get_content('head') ?>
 
@@ -39,15 +50,16 @@
         <?php endif ?>
     </head>
 
-    <body class="" data-theme-style="<?= \Altum\ThemeStyle::get() ?>">
+    <body class="<?= language()->direction == 'rtl' ? 'rtl' : null ?>" data-theme-style="<?= \Altum\ThemeStyle::get() ?>">
+        <?php require THEME_PATH . 'views/partials/announcements.php' ?>
 
         <main class="animate__animated animate__fadeIn">
 
-            <div class="container mt-4 mb-3">
+            <div class="container mt-8 mb-5">
                 <div class="d-flex justify-content-center">
                     <a href="<?= url() ?>">
                         <?php if(settings()->logo != ''): ?>
-                            <img src="<?= SITE_URL . UPLOADS_URL_PATH . 'logo/' . settings()->logo ?>" class="img-fluid navbar-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
+                            <img src="<?= UPLOADS_FULL_URL . 'logo/' . settings()->logo ?>" class="img-fluid navbar-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
                         <?php else: ?>
                             <h1><?= settings()->title ?></h1>
                         <?php endif ?>
@@ -67,8 +79,8 @@
 
         <?php require THEME_PATH . 'views/partials/js_global_variables.php' ?>
 
-        <?php foreach(['libraries/jquery.min.js', 'libraries/popper.min.js', 'libraries/bootstrap.min.js', 'main.js', 'functions.js', 'libraries/fontawesome.min.js', 'libraries/clipboard.min.js'] as $file): ?>
-            <script src="<?= SITE_URL . ASSETS_URL_PATH ?>js/<?= $file ?>?v=<?= PRODUCT_CODE ?>"></script>
+        <?php foreach(['libraries/jquery.min.js', 'libraries/popper.min.js', 'libraries/bootstrap.min.js', 'main.js', 'functions.js', 'libraries/fontawesome.min.js', 'libraries/fontawesome-solid.min.js', 'libraries/fontawesome-brands.modified.js'] as $file): ?>
+            <script src="<?= ASSETS_FULL_URL ?>js/<?= $file ?>?v=<?= PRODUCT_CODE ?>"></script>
         <?php endforeach ?>
 
         <?= \Altum\Event::get_content('javascript') ?>

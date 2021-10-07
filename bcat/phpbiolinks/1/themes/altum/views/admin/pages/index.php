@@ -112,9 +112,11 @@
                             </div>
                         </div>
                     </td>
-                    <td class="d-flex flex-column">
-                        <?= language()->admin_pages->pages->{'position_' . $row->position} ?>
-                        <small class="text-muted"><?= language()->admin_pages->input->{'type_' . mb_strtolower($row->type)} ?></small>
+                    <td>
+                        <div class="d-flex flex-column">
+                            <?= language()->admin_pages->pages->{'position_' . $row->position} ?>
+                            <small class="text-muted"><?= language()->admin_pages->input->{'type_' . mb_strtolower($row->type)} ?></small>
+                        </div>
                     </td>
                     <td class="text-muted"><?= sprintf(language()->admin_pages->pages->total_views, nr($row->total_views)) ?></td>
                     <td><?= include_view(THEME_PATH . 'views/admin/pages/admin_page_dropdown_button.php', ['id' => $row->page_id]) ?></td>
@@ -144,3 +146,6 @@
 
 <?php endif ?>
 
+
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/pages/page_delete_modal.php'), 'modals'); ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/pages/pages_category_delete_modal.php'), 'modals'); ?>

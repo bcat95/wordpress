@@ -4,7 +4,8 @@
     <h1 class="h3"><i class="fa fa-fw fa-xs fa-users text-primary-900 mr-2"></i> <?= language()->admin_users->header ?></h1>
 
     <div class="col-auto d-flex">
-        <div>
+
+        <div class="">
             <a href="<?= url('admin/user-create') ?>" class="btn btn-outline-primary"><i class="fa fa-fw fa-plus-circle"></i> <?= language()->admin_user_create->menu ?></a>
         </div>
 
@@ -115,93 +116,134 @@
                         </div>
 
                         <div class="form-group px-4 mt-4">
-                            <button type="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
+                            <button type="submit" name="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
                         </div>
                     </form>
 
                 </div>
             </div>
         </div>
+
+        <div class="ml-3">
+            <button id="bulk_enable" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="<?= language()->global->bulk_actions ?>"><i class="fa fa-fw fa-sm fa-list"></i></button>
+
+            <div id="bulk_group" class="btn-group d-none" role="group">
+                <div class="btn-group" role="group">
+                    <button id="bulk_actions" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?= language()->global->bulk_actions ?> <span id="bulk_counter" class="d-none"></span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="bulk_actions">
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#bulk_delete_modal"><?= language()->global->delete ?></a>
+                    </div>
+                </div>
+
+                <button id="bulk_disable" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="<?= language()->global->close ?>"><i class="fa fa-fw fa-times"></i></button>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <?= \Altum\Alerts::output_alerts() ?>
 
-<div class="table-responsive table-custom-container">
-    <table class="table table-custom">
-        <thead>
-        <tr>
-            <th><?= language()->admin_users->table->user ?></th>
-            <th><?= language()->admin_users->table->active ?></th>
-            <th><?= language()->admin_users->table->plan_id ?></th>
-            <th><?= language()->admin_users->table->details ?></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach($data->users as $row): ?>
+<form id="table" action="<?= SITE_URL . 'admin/users/bulk' ?>" method="post" role="form">
+    <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" />
+    <input type="hidden" name="type" value="" data-bulk-type />
+
+    <div class="table-responsive table-custom-container">
+        <table class="table table-custom">
+            <thead>
             <tr>
-                <td>
-                    <div class="d-flex">
-                        <img src="<?= get_gravatar($row->email) ?>" class="user-avatar rounded-circle mr-3" alt="" />
-
-                        <div class="d-flex flex-column">
-                            <div>
-                                <a href="<?= url('admin/user-view/' . $row->user_id) ?>" <?= $row->type == 1 ? 'class="font-weight-bold" data-toggle="tooltip" title="' . language()->admin_users->table->admin . '"' : null ?>><?= $row->name ?></a>
-                            </div>
-
-                            <span class="text-muted"><?= $row->email ?></span>
-                        </div>
+                <th data-bulk-table class="d-none">
+                    <div class="custom-control custom-checkbox">
+                        <input id="bulk_select_all" type="checkbox" class="custom-control-input" />
+                        <label class="custom-control-label" for="bulk_select_all"></label>
                     </div>
-                </td>
-                <td>
-                    <?php if($row->active == 0): ?>
-                    <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_user_update->main->is_enabled_unconfirmed ?>
-                    <?php elseif($row->active == 1): ?>
-                    <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_user_update->main->is_enabled_active ?>
-                    <?php elseif($row->active == 2): ?>
-                    <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_user_update->main->is_enabled_disabled ?>
-                    <?php endif ?>
-                </td>
-                <td>
-                    <div class="d-flex flex-column">
-                        <span><?= $data->plans[$row->plan_id]->name ?></span>
-
-                        <?php if($row->plan_id != 'free'): ?>
-                            <div>
-                                <small class="text-muted" data-toggle="tooltip" title="<?= language()->admin_users->table->plan_expiration_date ?>"><?= \Altum\Date::get($row->plan_expiration_date) ?></small>
-                            </div>
-                        <?php endif ?>
-                    </div>
-                </td>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->date, \Altum\Date::get($row->date)) ?>">
-                            <i class="fa fa-fw fa-clock text-muted"></i>
-                        </span>
-
-                        <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->last_activity, ($row->last_activity ? \Altum\Date::get($row->last_activity) : '-')) ?>">
-                            <i class="fa fa-fw fa-history text-muted"></i>
-                        </span>
-
-                        <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->total_logins, nr($row->total_logins)) ?>">
-                            <i class="fa fa-fw fa-user-clock text-muted"></i>
-                        </span>
-
-                        <?php if($row->country): ?>
-                            <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/countries/' . mb_strtolower($row->country) . '.svg' ?>" class="img-fluid icon-favicon mr-2" data-toggle="tooltip" title="<?= get_country_from_country_code($row->country) ?>" />
-                        <?php else: ?>
-                            <span class="mr-2" data-toggle="tooltip" title="<?= language()->admin_users->table->country_unknown ?>">
-                                <i class="fa fa-fw fa-globe text-muted"></i>
-                            </span>
-                        <?php endif ?>
-                    </div>
-                </td>
-                <td><?= include_view(THEME_PATH . 'views/admin/users/admin_user_dropdown_button.php', ['id' => $row->user_id]) ?></td>
+                </th>
+                <th><?= language()->admin_users->table->user ?></th>
+                <th><?= language()->admin_users->table->active ?></th>
+                <th><?= language()->admin_users->table->plan_id ?></th>
+                <th><?= language()->admin_users->table->details ?></th>
+                <th></th>
             </tr>
-        <?php endforeach ?>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            <?php foreach($data->users as $row): ?>
+                <?php //ALTUMCODE:DEMO if(DEMO) {$row->email = 'hidden@demo.com'; $row->name = 'hidden on demo';} ?>
+                <tr>
+                    <td data-bulk-table class="d-none">
+                        <div class="custom-control custom-checkbox">
+                            <input id="selected_user_id_<?= $row->user_id ?>" type="checkbox" class="custom-control-input" name="selected[]" value="<?= $row->user_id ?>" />
+                            <label class="custom-control-label" for="selected_user_id_<?= $row->user_id ?>"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex">
+                            <img src="<?= get_gravatar($row->email) ?>" class="user-avatar rounded-circle mr-3" alt="" />
+
+                            <div class="d-flex flex-column">
+                                <div>
+                                    <a href="<?= url('admin/user-view/' . $row->user_id) ?>" <?= $row->type == 1 ? 'class="font-weight-bold" data-toggle="tooltip" title="' . language()->admin_users->table->admin . '"' : null ?>><?= $row->name ?></a>
+                                </div>
+
+                                <span class="text-muted"><?= $row->email ?></span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <?php if($row->active == 0): ?>
+                        <span class="badge badge-pill badge-warning"><i class="fa fa-fw fa-eye-slash"></i> <?= language()->admin_user_update->main->is_enabled_unconfirmed ?>
+                        <?php elseif($row->active == 1): ?>
+                        <span class="badge badge-pill badge-success"><i class="fa fa-fw fa-check"></i> <?= language()->admin_user_update->main->is_enabled_active ?>
+                        <?php elseif($row->active == 2): ?>
+                        <span class="badge badge-pill badge-light"><i class="fa fa-fw fa-times"></i> <?= language()->admin_user_update->main->is_enabled_disabled ?>
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column">
+                            <span><?= $data->plans[$row->plan_id]->name ?></span>
+
+                            <?php if($row->plan_id != 'free'): ?>
+                                <div>
+                                    <small class="text-muted" data-toggle="tooltip" title="<?= language()->admin_users->table->plan_expiration_date ?>"><?= \Altum\Date::get($row->plan_expiration_date) ?></small>
+                                </div>
+                            <?php endif ?>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->date, \Altum\Date::get($row->date)) ?>">
+                                <i class="fa fa-fw fa-clock text-muted"></i>
+                            </span>
+
+                            <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->last_activity, ($row->last_activity ? \Altum\Date::get($row->last_activity) : '-')) ?>">
+                                <i class="fa fa-fw fa-history text-muted"></i>
+                            </span>
+
+                            <span class="mr-2" data-toggle="tooltip" title="<?= sprintf(language()->admin_users->table->total_logins, nr($row->total_logins)) ?>">
+                                <i class="fa fa-fw fa-user-clock text-muted"></i>
+                            </span>
+
+                            <?php if($row->country): ?>
+                                <img src="<?= ASSETS_FULL_URL . 'images/countries/' . mb_strtolower($row->country) . '.svg' ?>" class="img-fluid icon-favicon mr-2" data-toggle="tooltip" title="<?= get_country_from_country_code($row->country) ?>" />
+                            <?php else: ?>
+                                <span class="mr-2" data-toggle="tooltip" title="<?= language()->admin_users->table->country_unknown ?>">
+                                    <i class="fa fa-fw fa-globe text-muted"></i>
+                                </span>
+                            <?php endif ?>
+                        </div>
+                    </td>
+                    <td><?= include_view(THEME_PATH . 'views/admin/users/admin_user_dropdown_button.php', ['id' => $row->user_id]) ?></td>
+                </tr>
+            <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+</form>
 
 <div class="mt-3"><?= $data->pagination ?></div>
+
+<?php require THEME_PATH . 'views/admin/partials/js_bulk.php' ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/users/user_delete_modal.php'), 'modals'); ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/users/user_login_modal.php'), 'modals'); ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/partials/bulk_delete_modal.php'), 'modals'); ?>

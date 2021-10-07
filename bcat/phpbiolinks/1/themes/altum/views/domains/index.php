@@ -24,9 +24,11 @@
         <div class="col-12 col-xl-auto d-flex">
             <div>
             <?php if($this->user->plan_settings->domains_limit != -1 && $data->total_domains >= $this->user->plan_settings->domains_limit): ?>
-                <button type="button" data-confirm="<?= language()->domains->error_message->domains_limit ?>"  class="btn btn-primary rounded-pill"><i class="fa fa-fw fa-plus-circle"></i> <?= language()->global->create ?></button>
+                <button type="button" data-toggle="tooltip" title="<?= language()->domains->error_message->domains_limit ?>"  class="btn btn-primary disabled">
+                    <i class="fa fa-fw fa-plus-circle"></i> <?= language()->global->create ?>
+                </button>
             <?php else: ?>
-                <button type="button" data-toggle="modal" data-target="#domain_create" class="btn btn-primary rounded-pill"><i class="fa fa-fw fa-plus-circle"></i> <?= language()->global->create ?></button>
+                <button type="button" data-toggle="modal" data-target="#domain_create" class="btn btn-primary"><i class="fa fa-fw fa-plus-circle"></i> <?= language()->global->create ?></button>
             <?php endif ?>
             </div>
         </div>
@@ -74,14 +76,14 @@
 
                 <div class="col-1 d-flex justify-content-end">
                     <div class="dropdown">
-                        <a href="#" data-toggle="dropdown" class="text-secondary dropdown-toggle dropdown-toggle-simple">
-                            <i class="fa fa-ellipsis-v"></i>
+                        <button type="button" class="btn btn-link text-secondary dropdown-toggle dropdown-toggle-simple" data-toggle="dropdown">
+                            <i class="fa fa-fw fa-ellipsis-v"></i>
+                        </button>
 
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a href="#" data-toggle="modal" data-target="#domain_update" data-domain-id="<?= $row->domain_id ?>" data-scheme="<?= $row->scheme ?>" data-host="<?= $row->host ?>" data-custom-index-url="<?= $row->custom_index_url ?>" data-custom-not-found-url="<?= $row->custom_not_found_url ?>" class="dropdown-item"><i class="fa fa-fw fa-pencil-alt"></i> <?= language()->global->edit ?></a>
-                                <a href="#" data-toggle="modal" data-target="#domain_delete" data-domain-id="<?= $row->domain_id ?>" class="dropdown-item"><i class="fa fa-fw fa-times"></i> <?= language()->global->delete ?></a>
-                            </div>
-                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="#" data-toggle="modal" data-target="#domain_update" data-domain-id="<?= $row->domain_id ?>" data-scheme="<?= $row->scheme ?>" data-host="<?= $row->host ?>" data-custom-index-url="<?= $row->custom_index_url ?>" data-custom-not-found-url="<?= $row->custom_not_found_url ?>" class="dropdown-item"><i class="fa fa-fw fa-pencil-alt"></i> <?= language()->global->edit ?></a>
+                            <a href="#" data-toggle="modal" data-target="#domain_delete" data-domain-id="<?= $row->domain_id ?>" class="dropdown-item"><i class="fa fa-fw fa-times"></i> <?= language()->global->delete ?></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,7 +92,7 @@
         <div class="mt-3"><?= $data->pagination ?></div>
     <?php else: ?>
         <div class="d-flex flex-column align-items-center justify-content-center">
-            <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-3" alt="<?= language()->domains->domains->no_data ?>" />
+            <img src="<?= ASSETS_FULL_URL . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-3" alt="<?= language()->domains->domains->no_data ?>" />
             <h2 class="h4 text-muted"><?= language()->domains->domains->no_data ?></h2>
 
             <?php if($this->user->plan_settings->domains_limit != -1 && $data->total_domains < $this->user->plan_settings->domains_limit): ?>

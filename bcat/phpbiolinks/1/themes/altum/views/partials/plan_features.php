@@ -1,38 +1,31 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-
 <ul class="list-style-none m-0">
-
     <li class="d-flex align-items-baseline mb-2">
         <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->projects_limit ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
         <div class="<?= $data->plan_settings->projects_limit ? null : 'text-muted' ?>">
-            <?php if($data->plan_settings->projects_limit == -1): ?>
-                <?= language()->global->plan_settings->unlimited_projects_limit ?>
-            <?php else: ?>
-                <?= sprintf(language()->global->plan_settings->projects_limit, '<strong>' . nr($data->plan_settings->projects_limit) . '</strong>') ?>
-            <?php endif ?>
+            <?= sprintf(language()->global->plan_settings->projects_limit, ($data->plan_settings->projects_limit == -1 ? language()->global->unlimited : nr($data->plan_settings->projects_limit))) ?>
         </div>
     </li>
 
     <li class="d-flex align-items-baseline mb-2">
         <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->pixels_limit ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
         <div class="<?= $data->plan_settings->pixels_limit ? null : 'text-muted' ?>">
-            <?php if($data->plan_settings->pixels_limit == -1): ?>
-                <?= language()->global->plan_settings->unlimited_pixels_limit ?>
-            <?php else: ?>
-                <?= sprintf(language()->global->plan_settings->pixels_limit, '<strong>' . nr($data->plan_settings->pixels_limit) . '</strong>') ?>
-            <?php endif ?>
+            <?= sprintf(language()->global->plan_settings->pixels_limit, ($data->plan_settings->pixels_limit == -1 ? language()->global->unlimited : nr($data->plan_settings->pixels_limit))) ?>
         </div>
     </li>
 
     <li class="d-flex align-items-baseline mb-2">
         <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->biolinks_limit ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
         <div class="<?= $data->plan_settings->biolinks_limit ? null : 'text-muted' ?>">
-            <?php if($data->plan_settings->biolinks_limit == -1): ?>
-                <?= language()->global->plan_settings->unlimited_biolinks_limit ?>
-            <?php else: ?>
-                <?= sprintf(language()->global->plan_settings->biolinks_limit, '<strong>' . nr($data->plan_settings->biolinks_limit) . '</strong>') ?>
-            <?php endif ?>
+            <?= sprintf(language()->global->plan_settings->biolinks_limit, ($data->plan_settings->biolinks_limit == -1 ? language()->global->unlimited : nr($data->plan_settings->biolinks_limit))) ?>
+        </div>
+    </li>
+
+    <li class="d-flex align-items-baseline mb-2">
+        <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->biolink_blocks_limit ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
+        <div class="<?= $data->plan_settings->biolink_blocks_limit ? null : 'text-muted' ?>">
+            <?= sprintf(language()->global->plan_settings->biolink_blocks_limit, ($data->plan_settings->biolink_blocks_limit == -1 ? language()->global->unlimited : nr($data->plan_settings->biolink_blocks_limit))) ?>
         </div>
     </li>
 
@@ -40,11 +33,7 @@
         <li class="d-flex align-items-baseline mb-2">
             <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->links_limit ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
             <div class="<?= $data->plan_settings->links_limit ? null : 'text-muted' ?>">
-                <?php if($data->plan_settings->links_limit == -1): ?>
-                    <?= language()->global->plan_settings->unlimited_links_limit ?>
-                <?php else: ?>
-                    <?= sprintf(language()->global->plan_settings->links_limit, '<strong>' . nr($data->plan_settings->links_limit) . '</strong>') ?>
-                <?php endif ?>
+                <?= sprintf(language()->global->plan_settings->links_limit, ($data->plan_settings->links_limit == -1 ? language()->global->unlimited : nr($data->plan_settings->links_limit))) ?>
             </div>
         </li>
     <?php endif ?>
@@ -53,7 +42,7 @@
     <?php $enabled_biolink_blocks_count = count($enabled_biolink_blocks) ?>
     <?php
     $enabled_biolink_blocks_string = implode(', ', array_map(function($key) {
-        return language()->link->biolink->{mb_strtolower($key)}->name;
+        return language()->link->biolink->blocks->{mb_strtolower($key)};
     }, array_keys($enabled_biolink_blocks)));
     ?>
     <li class="d-flex align-items-baseline mb-2">
@@ -73,17 +62,19 @@
         <li class="d-flex align-items-baseline mb-2">
             <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->domains_limit ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
             <div class="<?= $data->plan_settings->domains_limit ? null : 'text-muted' ?>">
-                <?php if($data->plan_settings->domains_limit == -1): ?>
-                    <?= language()->global->plan_settings->unlimited_domains_limit ?>
-                <?php else: ?>
-                    <?= sprintf(language()->global->plan_settings->domains_limit, '<strong>' . nr($data->plan_settings->domains_limit) . '</strong>') ?>
-                <?php endif ?>
+                <?= sprintf(language()->global->plan_settings->domains_limit, ($data->plan_settings->domains_limit == -1 ? language()->global->unlimited : nr($data->plan_settings->domains_limit))) ?>
             </div>
         </li>
     <?php endif ?>
 
-    <?php $simple_user_plan_settings = require APP_PATH . 'includes/simple_user_plan_settings.php' ?>
-    <?php foreach($simple_user_plan_settings as $row): ?>
+    <li class="d-flex align-items-baseline mb-2">
+        <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->track_links_retention ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
+        <div class="<?= $data->plan_settings->track_links_retention ? null : 'text-muted' ?>">
+            <?= sprintf(language()->global->plan_settings->track_links_retention, ($data->plan_settings->track_links_retention == -1 ? language()->global->unlimited : nr($data->plan_settings->track_links_retention))) ?>
+        </div>
+    </li>
+
+    <?php foreach(require APP_PATH . 'includes/simple_user_plan_settings.php' as $row): ?>
         <li class="d-flex align-items-baseline mb-2">
             <i class="fa fa-fw fa-sm mr-3 <?= $data->plan_settings->{$row} ? 'fa-check-circle text-success' : 'fa-times-circle text-muted' ?>"></i>
             <div class="<?= $data->plan_settings->{$row} ? null : 'text-muted' ?>">
@@ -93,5 +84,4 @@
             </div>
         </li>
     <?php endforeach ?>
-
 </ul>

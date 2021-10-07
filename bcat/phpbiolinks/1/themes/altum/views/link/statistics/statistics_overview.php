@@ -14,7 +14,7 @@
                     <div class="mt-4">
                         <div class="d-flex justify-content-between mb-1">
                             <div class="text-truncate">
-                                <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/countries/' . ($key ? mb_strtolower($key) : 'unknown') . '.svg' ?>" class="img-fluid icon-favicon mr-1" />
+                                <img src="<?= ASSETS_FULL_URL . 'images/countries/' . ($key ? mb_strtolower($key) : 'unknown') . '.svg' ?>" class="img-fluid icon-favicon mr-1" />
                                 <?php if($key): ?>
                                     <a href="<?= url((isset($data->link->biolink_block_id) ? 'biolink-block/' . $data->link->biolink_block_id : 'link/' . $data->link->link_id) . '/' . $data->method . '?type=city_name&country_code=' . $key . '&start_date=' . $data->datetime['start_date'] . '&end_date=' . $data->datetime['end_date']) ?>" title="<?= $key ?>" class="align-middle"><?= $key ? get_country_from_country_code($key) : language()->link->statistics->country_unknown ?></a>
                                 <?php else: ?>

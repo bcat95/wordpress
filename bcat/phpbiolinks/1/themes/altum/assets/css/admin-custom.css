@@ -1,11 +1,9 @@
-body.admin {
-    overflow: hidden;
+body {
+    width: 100%;
+    height: 100%;
 }
 
 .admin-container {
-    height: 100vh;
-    display: flex;
-    overflow-x: hidden;
 }
 
 .admin-sidebar {
@@ -14,11 +12,21 @@ body.admin {
     background: var(--white);
     border-right: 2px solid var(--gray-200);
     margin-left: -250px;
-    transition: margin-left .15s linear;
+    transition: margin .15s linear;
     overflow-y: auto;
-    position: absolute;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
     height: 100%;
-    z-index: 2;
+    z-index: 101;
+}
+
+[dir="rtl"] .admin-sidebar {
+    margin-left: initial;
+    left: initial;
+    right: 0;
+    margin-right: -252px;
 }
 
 [data-theme-style="dark"] .admin-sidebar {
@@ -29,11 +37,19 @@ body.admin-sidebar-opened .admin-sidebar {
     margin-left: 0;
 }
 
+[dir="rtl"] body.admin-sidebar-opened .admin-sidebar {
+    margin-left: initial;
+    margin-right: 0;
+}
+
 @media (min-width: 992px) {
     .admin-sidebar {
         margin-left: 0;
-        position: initial;
-        height: initial;
+    }
+
+    [dir="rtl"] .admin-sidebar {
+        margin-left: initial;
+        margin-right: 0;
     }
 }
 
@@ -92,17 +108,33 @@ body.admin-sidebar-opened .admin-sidebar {
 }
 
 .admin-overlay {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     background: var(--gray);
-    z-index: 1;
-    opacity: .6;
+    z-index: 100;
+    opacity: .5;
 }
 
 .admin-content {
     flex-grow: 1;
     overflow: auto;
+    margin-left: 0;
+}
+
+[dir="rtl"] .admin-content {
+    margin-left: initial;
+    margin-right: 0;
+}
+
+@media (min-width: 992px) {
+    .admin-content {
+        margin-left: 250px;
+    }
+    [dir="rtl"] .admin-content {
+        margin-left: initial;
+        margin-right: 250px;
+    }
 }
 
 .admin-navbar {
@@ -164,6 +196,8 @@ body.admin-sidebar-opened .admin-sidebar {
 
 /* Other */
 .user-avatar {
+    min-width: 45px;
+    min-height: 45px;
     width: 45px;
     height: 45px;
 }
@@ -367,7 +401,7 @@ footer img {
     animation-fill-mode:none;
 }
 
-@-webkit-keyframes fadeIn{
+@-webkit-keyframes fadeIn {
     0% {
         opacity:0
     }
@@ -375,7 +409,7 @@ footer img {
         opacity:1
     }
 }
-@keyframes fadeIn{
+@keyframes fadeIn {
     0% {
         opacity:0
     }

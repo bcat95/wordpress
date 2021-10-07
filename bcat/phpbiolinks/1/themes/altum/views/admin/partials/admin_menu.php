@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-light admin-navbar-top">
     <a class="navbar-brand" href="<?= url() ?>">
         <?php if(settings()->logo != ''): ?>
-            <img src="<?= SITE_URL . UPLOADS_URL_PATH . 'logo/' . settings()->logo ?>" class="img-fluid admin-navbar-logo-top" alt="<?= language()->global->accessibility->logo_alt ?>" />
+            <img src="<?= UPLOADS_FULL_URL . 'logo/' . settings()->logo ?>" class="img-fluid admin-navbar-logo-top" alt="<?= language()->global->accessibility->logo_alt ?>" />
         <?php else: ?>
             <?= settings()->title ?>
         <?php endif ?>

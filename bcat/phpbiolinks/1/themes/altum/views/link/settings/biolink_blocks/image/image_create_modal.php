@@ -16,18 +16,18 @@
                     <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" required="required" />
                     <input type="hidden" name="request_type" value="create" />
                     <input type="hidden" name="link_id" value="<?= $data->link->link_id ?>" />
-                    <input type="hidden" name="type" value="image" />
+                    <input type="hidden" name="block_type" value="image" />
 
                     <div class="notification-container"></div>
 
                     <div class="form-group">
-                        <label><i class="fa fa-fw fa-image fa-sm mr-1"></i> <?= language()->create_biolink_image_modal->input->image ?></label>
-                        <input type="file" name="image" accept=".gif, .png, .jpg, .jpeg, .svg" class="form-control-file" required="required" />
+                        <label for="image_image"><i class="fa fa-fw fa-image fa-sm mr-1"></i> <?= language()->create_biolink_image_modal->image ?></label>
+                        <input id="image_image" type="file" name="image" accept=".gif, .png, .jpg, .jpeg, .svg" class="form-control-file" required="required" />
                     </div>
 
                     <div class="form-group">
-                        <label><i class="fa fa-fw fa-link fa-sm mr-1"></i> <?= language()->create_biolink_image_modal->input->location_url ?></label>
-                        <input type="text" class="form-control" name="location_url" />
+                        <label for="image_location_url"><i class="fa fa-fw fa-link fa-sm mr-1"></i> <?= language()->create_biolink_image_modal->location_url ?></label>
+                        <input id="image_location_url" type="text" class="form-control" name="location_url" />
                     </div>
 
                     <div class="text-center mt-4">
@@ -39,44 +39,3 @@
         </div>
     </div>
 </div>
-
-
-<?php ob_start() ?>
-<script>
-    $('form[name="create_biolink_image"]').on('submit', event => {
-        let form = $(event.currentTarget)[0];
-        let data = new FormData(form);
-
-        $.ajax({
-            type: 'POST',
-            enctype: 'multipart/form-data',
-            processData: false,
-            contentType: false,
-            cache: false,
-            url: 'biolink-block-ajax',
-            data: data,
-            success: (data) => {
-                if(data.status == 'error') {
-
-                    let notification_container = $(event.currentTarget).find('.notification-container');
-
-                    notification_container.html('');
-
-                    display_notifications(data.message, 'error', notification_container);
-
-                }
-
-                else if(data.status == 'success') {
-
-                    /* Fade out refresh */
-                    fade_out_redirect({ url: data.details.url, full: true });
-
-                }
-            },
-            dataType: 'json'
-        });
-
-        event.preventDefault();
-    })
-</script>
-<?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>

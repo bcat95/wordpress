@@ -4,11 +4,11 @@
 
 <div class="container">
     <div class="d-flex flex-column align-items-center">
-        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-5 px-0">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-5">
             <?= \Altum\Alerts::output_alerts() ?>
 
             <div class="card border-0">
-                <div class="card-body">
+                <div class="card-body p-5">
                     <h4 class="card-title"><?= language()->register->header ?></h4>
 
                     <form action="" method="post" class="mt-4" role="form">
@@ -20,7 +20,7 @@
 
                         <div class="form-group">
                             <label for="email"><?= language()->register->form->email ?></label>
-                            <input id="email" type="text" name="email" class="form-control <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" placeholder="<?= language()->register->form->email_placeholder ?>" required="required" />
+                            <input id="email" type="email" name="email" class="form-control <?= \Altum\Alerts::has_field_errors('email') ? 'is-invalid' : null ?>" value="<?= $data->values['email'] ?>" placeholder="<?= language()->register->form->email_placeholder ?>" required="required" />
                             <?= \Altum\Alerts::output_field_error('email') ?>
                         </div>
 
@@ -53,19 +53,29 @@
                             <button type="submit" name="submit" class="btn btn-primary btn-block"><?= language()->register->form->register ?></button>
                         </div>
 
-                        <div class="row">
-                            <?php if(settings()->facebook->is_enabled): ?>
-                                <div class="col-sm mt-1">
-                                    <a href="<?= $data->facebook_login_url ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->facebook, "<i class=\"fab fa-fw fa-facebook\"></i>") ?></a>
-                                </div>
-                            <?php endif ?>
-                        </div>
+                        <?php if(settings()->facebook->is_enabled): ?>
+                            <div class="mt-2">
+                                <a href="<?= url('login/facebook-initiate') ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->facebook, "<i class=\"fab fa-fw fa-facebook\"></i>") ?></a>
+                            </div>
+                        <?php endif ?>
+
+                        <?php if(settings()->google->is_enabled): ?>
+                            <div class="mt-2">
+                                <a href="<?= url('login/google-initiate') ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->google, "<i class=\"fab fa-fw fa-google\"></i>") ?></a>
+                            </div>
+                        <?php endif ?>
+
+                        <?php if(settings()->twitter->is_enabled): ?>
+                            <div class="mt-2">
+                                <a href="<?= url('login/twitter-initiate') ?>" class="btn btn-light btn-block"><?= sprintf(language()->login->display->twitter, "<i class=\"fab fa-fw fa-twitter\"></i>") ?></a>
+                            </div>
+                        <?php endif ?>
                     </form>
                 </div>
             </div>
         </div>
 
-        <div class="text-center mt-4 mb-2">
+        <div class="text-center mt-4">
             <small><a href="login" class="text-muted" role="button"><?= language()->register->login ?></a></small>
         </div>
     </div>

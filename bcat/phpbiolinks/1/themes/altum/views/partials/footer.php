@@ -1,12 +1,16 @@
 <?php defined('ALTUMCODE') || die() ?>
 
-<footer class="d-print-none footer py-4">
+<footer class="d-print-none footer">
     <div class="container">
         <div class="row">
+
             <div class="col-12 col-sm-4 mb-4 mb-sm-0">
                 <div class="mb-2">
-                    <a class="h5 p-0" href="<?= url() ?>">Biolink.com.vn</a>
+                    <a class="h5 p-0" href="<?= url() ?>">
+                        <?= settings()->title ?>
+                    </a>
                 </div>
+
                 <div><?= sprintf(language()->global->footer->copyright, date('Y'), settings()->title) ?></div>
             </div>
 
@@ -30,10 +34,10 @@
                     <div class="dropdown mb-2">
                         <a class="dropdown-toggle clickable" id="language_switch" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-fw fa-language text-muted"></i> <?= language()->global->language ?></a>
 
-                        <div class="dropdown-menu" aria-labelledby="language_switch">
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="language_switch">
                             <h6 class="dropdown-header"><?= language()->global->choose_language ?></h6>
-                            <?php foreach(\Altum\Language::$languages as $language_name): ?>
-                                <a class="dropdown-item" href="<?= url((\Altum\Routing\Router::$controller_key == 'index' ? 'index' : $_GET['altum']) . '?language=' . $language_name) ?>">
+                            <?php foreach(\Altum\Language::$languages as $language_code => $language_name): ?>
+                                <a class="dropdown-item" href="<?= SITE_URL . $language_code . '/' . \Altum\Routing\Router::$original_request . '?set_language=' . $language_name ?>">
                                     <?php if($language_name == \Altum\Language::$language): ?>
                                         <i class="fa fa-fw fa-sm fa-check mr-1 text-success"></i>
                                     <?php else: ?>
@@ -75,17 +79,15 @@
 
                                 switch(chosen_theme_style) {
                                     case 'dark':
-                                        css.setAttribute('href', <?= json_encode(SITE_URL . ASSETS_URL_PATH . 'css/' . \Altum\ThemeStyle::$themes['dark']['file'] . '?v=' . PRODUCT_CODE) ?>);
+                                        css.setAttribute('href', <?= json_encode(ASSETS_FULL_URL . 'css/' . \Altum\ThemeStyle::$themes['dark'][language()->direction] . '?v=' . PRODUCT_CODE) ?>);
                                         document.querySelector(`[data-choose-theme-style="dark"]`).classList.add('d-none');
                                         document.querySelector(`[data-choose-theme-style="light"]`).classList.remove('d-none');
-                                        document.querySelector(`body`).classList.add('bc-dark');
                                         break;
 
                                     case 'light':
-                                        css.setAttribute('href', <?= json_encode(SITE_URL . ASSETS_URL_PATH . 'css/' . \Altum\ThemeStyle::$themes['light']['file'] . '?v=' . PRODUCT_CODE) ?>);
+                                        css.setAttribute('href', <?= json_encode(ASSETS_FULL_URL . 'css/' . \Altum\ThemeStyle::$themes['light'][language()->direction] . '?v=' . PRODUCT_CODE) ?>);
                                         document.querySelector(`[data-choose-theme-style="dark"]`).classList.remove('d-none');
                                         document.querySelector(`[data-choose-theme-style="light"]`).classList.add('d-none');
-                                        document.querySelector(`body`).classList.add('bc-light');
                                         break;
                                 }
 

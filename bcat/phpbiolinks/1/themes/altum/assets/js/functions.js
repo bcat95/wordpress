@@ -35,11 +35,8 @@ const fade_out_redirect = ({ url = false, selector = 'body', wait_time = 70, ful
 
 };
 
-const redirect = (url, full = false) => {
-    /* Get the base url */
-    let base_url = $('#url').val();
-
-    window.location.href = full ? url : `${base_url}${url}`;
+const redirect = (path, is_full_url = false) => {
+    window.location.href = is_full_url ? path : `${url}${path}`;
 };
 
 const ajax_call_helper = (event, controller, request_type, success_callback = () => {}) => {
@@ -130,16 +127,3 @@ const set_cookie = (name, value, days, path) => {
 const delete_cookie = (name, path) => {
     set_cookie(name, '', -1, path);
 };
-
-const get_slug = (string, delimiter = '-', lowercase = true) => {
-    string = string.replaceAll(/[^a-zA-Z0-9._-]+/g, '');
-
-    let regex = new RegExp(`${delimiter}+`, 'g');
-    string = string.replaceAll(regex, delimiter);
-
-    string = string.trim();
-
-    string = lowercase ? string.toLowerCase() : string;
-
-    return string;
-}

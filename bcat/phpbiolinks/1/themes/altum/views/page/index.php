@@ -21,10 +21,6 @@
 
         <div class="d-print-none col-auto p-0 d-flex align-items-center">
             <button type="button" class="btn btn-sm btn-outline-secondary mr-3" onclick="window.print()"><i class="fa fa-fw fa-sm fa-print"></i> <?= language()->page->print ?></button>
-
-            <?php if(\Altum\Middlewares\Authentication::is_admin()): ?>
-                <?= include_view(THEME_PATH . 'views/admin/pages/admin_page_dropdown_button.php', ['id' => $data->page->page_id]) ?>
-            <?php endif ?>
         </div>
     </div>
     <p class="text-muted mb-4">

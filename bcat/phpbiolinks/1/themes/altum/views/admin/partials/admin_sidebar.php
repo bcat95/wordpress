@@ -4,7 +4,7 @@
     <div class="admin-sidebar-title">
         <a href="<?= url() ?>" class="text-decoration-none text-truncate">
             <?php if(settings()->logo != ''): ?>
-                <img src="<?= SITE_URL . UPLOADS_URL_PATH . 'logo/' . settings()->logo ?>" class="img-fluid admin-navbar-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
+                <img src="<?= UPLOADS_FULL_URL . 'logo/' . settings()->logo ?>" class="img-fluid admin-navbar-logo" alt="<?= language()->global->accessibility->logo_alt ?>" />
             <?php else: ?>
                 <span class="admin-navbar-brand"><?= settings()->title ?></span>
             <?php endif ?>
@@ -26,6 +26,15 @@
                 <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-users"></i></div>
                 <div class="col">
                     <span class="d-inline"><?= language()->admin_users->menu ?></span>
+                </div>
+            </a>
+        </li>
+
+        <li class="<?= in_array(\Altum\Routing\Router::$controller, ['AdminUsersLogs']) ? 'active' : null ?>">
+            <a class="nav-link d-flex flex-row" href="<?= url('admin/users-logs') ?>">
+                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-scroll"></i></div>
+                <div class="col">
+                    <span class="d-inline"><?= language()->admin_users_logs->menu ?></span>
                 </div>
             </a>
         </li>
@@ -111,6 +120,17 @@
                 </div>
             </a>
         </li>
+
+            <?php if(\Altum\Plugin::is_active('affiliate')): ?>
+            <li class="<?= \Altum\Routing\Router::$controller == 'AdminAffiliatesWithdrawals' ? 'active' : null ?>">
+                <a class="nav-link d-flex flex-row" href="<?= url('admin/affiliates-withdrawals') ?>">
+                    <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-wallet"></i></div>
+                    <div class="col">
+                        <span class="d-inline"><?= language()->admin_affiliates_withdrawals->menu ?></span>
+                    </div>
+                </a>
+            </li>
+            <?php endif ?>
         <?php endif ?>
 
         <li class="<?= \Altum\Routing\Router::$controller == 'AdminStatistics' ? 'active' : null ?>">
@@ -127,6 +147,15 @@
                 <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-code"></i></div>
                 <div class="col">
                     <span class="d-inline"><?= language()->admin_api_documentation->menu ?></span>
+                </div>
+            </a>
+        </li>
+
+        <li class="<?= \Altum\Routing\Router::$controller == 'AdminPlugins' ? 'active' : null ?>">
+            <a class="nav-link d-flex flex-row" href="<?= url('admin/plugins') ?>">
+                <div class="col-1 d-flex align-items-center"><i class="fa fa-fw fa-sm fa-puzzle-piece"></i></div>
+                <div class="col">
+                    <span class="d-inline"><?= language()->admin_plugins->menu ?></span>
                 </div>
             </a>
         </li>

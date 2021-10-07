@@ -1,7 +1,7 @@
 <?php defined('ALTUMCODE') || die() ?>
 
 <div class="d-flex justify-content-between mb-4">
-    <h1 class="h3 mr-3"><i class="fa fa-fw fa-xs fa-receipt text-primary-900 mr-2"></i> <?= language()->admin_tax_create->header ?></h1>
+    <h1 class="h3 mb-0 mr-1"><i class="fa fa-fw fa-xs fa-receipt text-primary-900 mr-2"></i> <?= language()->admin_tax_create->header ?></h1>
 </div>
 
 <div class="alert alert-info" role="alert">

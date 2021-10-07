@@ -20,7 +20,24 @@
             <div class="col-auto p-0 d-flex">
                 <div class="ml-3">
                     <div class="dropdown">
-                        <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> rounded-pill filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle-simple" data-toggle="dropdown" title="<?= language()->global->export ?>">
+                            <i class="fa fa-fw fa-sm fa-download"></i>
+                        </button>
+
+                        <div class="dropdown-menu  dropdown-menu-right">
+                            <a href="<?= url('account-payments?' . $data->filters->get_get() . '&export=csv') ?>" target="_blank" class="dropdown-item">
+                                <i class="fa fa-fw fa-sm fa-file-csv mr-1"></i> <?= language()->global->export_csv ?>
+                            </a>
+                            <a href="<?= url('account-payments?' . $data->filters->get_get() . '&export=json') ?>" target="_blank" class="dropdown-item">
+                                <i class="fa fa-fw fa-sm fa-file-code mr-1"></i> <?= language()->global->export_json ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ml-3">
+                    <div class="dropdown">
+                        <button type="button" class="btn <?= count($data->filters->get) ? 'btn-outline-primary' : 'btn-outline-secondary' ?> filters-button dropdown-toggle-simple" data-toggle="dropdown"><i class="fa fa-fw fa-sm fa-filter"></i></button>
 
                         <div class="dropdown-menu dropdown-menu-right filters-dropdown">
                             <div class="dropdown-header d-flex justify-content-between">
@@ -41,6 +58,7 @@
                                         <option value="paypal" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'paypal' ? 'selected="selected"' : null ?>><?= language()->account_payments->filters->processor_paypal ?></option>
                                         <option value="stripe" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'stripe' ? 'selected="selected"' : null ?>><?= language()->account_payments->filters->processor_stripe ?></option>
                                         <option value="offline_payment" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'offline_payment' ? 'selected="selected"' : null ?>><?= language()->account_payments->filters->processor_offline_payment ?></option>
+                                        <option value="coinbase" <?= isset($data->filters->filters['processor']) && $data->filters->filters['processor'] == 'coinbase' ? 'selected="selected"' : null ?>><?= language()->account_payments->filters->processor_coinbase ?></option>
                                     </select>
                                 </div>
 
@@ -80,7 +98,7 @@
                                 </div>
 
                                 <div class="form-group px-4 mt-4">
-                                    <button type="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
+                                    <button type="submit" name="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
                                 </div>
                             </form>
 
@@ -165,7 +183,7 @@
 
     <?php else: ?>
         <div class="d-flex flex-column align-items-center justify-content-center">
-            <img src="<?= SITE_URL . ASSETS_URL_PATH . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-3" alt="<?= language()->account_payments->payments->no_data ?>" />
+            <img src="<?= ASSETS_FULL_URL . 'images/no_rows.svg' ?>" class="col-10 col-md-6 col-lg-4 mb-3" alt="<?= language()->account_payments->payments->no_data ?>" />
             <h2 class="h4 text-muted"><?= language()->account_payments->payments->no_data ?></h2>
         </div>
     <?php endif ?>

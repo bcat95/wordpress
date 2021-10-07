@@ -31,7 +31,7 @@
     $('#pixel_delete_modal').on('show.bs.modal', event => {
         let pixel_id = $(event.relatedTarget).data('pixel-id');
 
-        $(event.currentTarget).find('#pixel_delete_url').attr('href', `${url}admin/status-pages/delete/${pixel_id}&global_token=${global_token}`);
+        $(event.currentTarget).find('#pixel_delete_url').attr('href', `${url}admin/pixels/delete/${pixel_id}&global_token=${global_token}`);
     });
 </script>
 <?php \Altum\Event::add_content(ob_get_clean(), 'javascript') ?>

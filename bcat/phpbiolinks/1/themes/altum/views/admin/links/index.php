@@ -94,22 +94,50 @@
                         </div>
 
                         <div class="form-group px-4 mt-4">
-                            <button type="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
+                            <button type="submit" name="submit" class="btn btn-sm btn-primary btn-block"><?= language()->global->submit ?></button>
                         </div>
                     </form>
 
                 </div>
             </div>
         </div>
+
+        <div class="ml-3">
+            <button id="bulk_enable" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="<?= language()->global->bulk_actions ?>"><i class="fa fa-fw fa-sm fa-list"></i></button>
+
+            <div id="bulk_group" class="btn-group d-none" role="group">
+                <div class="btn-group" role="group">
+                    <button id="bulk_actions" type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <?= language()->global->bulk_actions ?> <span id="bulk_counter" class="d-none"></span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="bulk_actions">
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#bulk_delete_modal"><?= language()->global->delete ?></a>
+                    </div>
+                </div>
+
+                <button id="bulk_disable" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="<?= language()->global->close ?>"><i class="fa fa-fw fa-times"></i></button>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <?= \Altum\Alerts::output_alerts() ?>
 
-<div class="table-responsive table-custom-container">
+<form id="table" action="<?= SITE_URL . 'admin/links/bulk' ?>" method="post" role="form">
+    <input type="hidden" name="token" value="<?= \Altum\Middlewares\Csrf::get() ?>" />
+    <input type="hidden" name="type" value="" data-bulk-type />
+
+    <div class="table-responsive table-custom-container">
     <table class="table table-custom">
         <thead>
         <tr>
+            <th data-bulk-table class="d-none">
+                <div class="custom-control custom-checkbox">
+                    <input id="bulk_select_all" type="checkbox" class="custom-control-input" />
+                    <label class="custom-control-label" for="bulk_select_all"></label>
+                </div>
+            </th>
             <th><?= language()->admin_links->table->user ?></th>
             <th></th>
             <th><?= language()->admin_links->table->url ?></th>
@@ -121,7 +149,14 @@
         </thead>
         <tbody>
         <?php foreach($data->links as $row): ?>
+            <?php //ALTUMCODE:DEMO if(DEMO) {$row->user_email = 'hidden@demo.com'; $row->user_name = 'hidden on demo';} ?>
             <tr>
+                <td data-bulk-table class="d-none">
+                    <div class="custom-control custom-checkbox">
+                        <input id="selected_link_id_<?= $row->link_id ?>" type="checkbox" class="custom-control-input" name="selected[]" value="<?= $row->link_id ?>" />
+                        <label class="custom-control-label" for="selected_link_id_<?= $row->link_id ?>"></label>
+                    </div>
+                </td>
                 <td>
                     <div class="d-flex flex-column">
                         <div>
@@ -173,5 +208,10 @@
         </tbody>
     </table>
 </div>
+</form>
 
 <div class="mt-3"><?= $data->pagination ?></div>
+
+<?php require THEME_PATH . 'views/admin/partials/js_bulk.php' ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/partials/bulk_delete_modal.php'), 'modals'); ?>
+<?php \Altum\Event::add_content(include_view(THEME_PATH . 'views/admin/links/link_delete_modal.php'), 'modals'); ?>
